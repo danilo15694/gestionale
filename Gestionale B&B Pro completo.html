@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)file:///C:/Users/danil/Downloads/Gestionale_BnB_Pro_COMPLETO.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestionale B&amp;B Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="file:///C:/Users/danil/Downloads/Gestionale%20B&amp;B%20Pro%202_files/css2" rel="stylesheet">
+<script src="file:///C:/Users/danil/Downloads/Gestionale%20B&amp;B%20Pro%202_files/qrcode.min.js.download"></script>
+<script src="file:///C:/Users/danil/Downloads/Gestionale%20B&amp;B%20Pro%202_files/jspdf.umd.min.js.download"></script>
+<style>
+:root{
+  --bg:#F5F0E8;--surface:#FFFDF8;--surface2:#F0EBE0;--border:#D8D0C0;
+  --text:#1A1612;--text2:#5A5248;--text3:#8A8278;
+  --accent:#2B5F3F;--accent-light:#E8F2EC;--accent-dark:#1A3D28;
+  --warn:#8B4513;--warn-light:#FFF0E6;
+  --danger:#8B1A1A;--danger-light:#FFF0F0;
+  --gold:#B8860B;--gold-light:#FFF8E0;
+  --blue:#1A4A8B;--blue-light:#E8F0FF;
+  --radius:12px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;min-height:100vh;line-height:1.6}
+h1,h2,h3{font-family:'DM Serif Display',serif;font-weight:400}
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:262px;background:var(--accent-dark);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+.sidebar-logo{padding:24px 22px 18px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar-logo h1{color:#fff;font-size:21px;line-height:1.2}
+.sidebar-logo span{color:rgba(255,255,255,0.4);font-size:10px;font-family:'DM Sans',sans-serif;letter-spacing:0.06em;text-transform:uppercase}
+.nav{padding:12px 10px;flex:1}
+.nav-group-label{font-size:10px;font-weight:600;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:0.08em;padding:10px 12px 5px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--radius-sm);color:rgba(255,255,255,0.62);font-size:13px;cursor:pointer;transition:all 0.15s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,0.15);color:#fff;font-weight:500}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.8}
+.sidebar-footer{padding:14px 10px;border-top:1px solid rgba(255,255,255,0.1)}
+.sidebar-stat{padding:9px 12px;background:rgba(255,255,255,0.06);border-radius:var(--radius-sm);margin-bottom:5px}
+.sidebar-stat .lbl{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em}
+.sidebar-stat .val{font-size:18px;font-family:'DM Serif Display',serif;color:#fff}
+.page-header{padding:24px 30px 18px;border-bottom:1px solid var(--border)}
+.page-header h2{font-size:24px;color:var(--text)}
+.page-header p{color:var(--text3);font-size:13px;margin-top:2px}
+.section{display:none;padding:24px 30px}
+.section.active{display:block}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:20px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.kpi-card .lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
+.kpi-card .val{font-size:22px;font-family:'DM Serif Display',serif;color:var(--text)}
+.kpi-card .val.green{color:var(--accent)}
+.kpi-card .val.amber{color:var(--gold)}
+.kpi-card .sub{font-size:11px;color:var(--text3);margin-top:2px}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.form-card h3{font-size:16px;margin-bottom:14px;color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.form-grid.two{grid-template-columns:1fr 1fr}
+.form-grid.four{grid-template-columns:1fr 1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 11px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;transition:border 0.15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+.field input[readonly]{cursor:not-allowed;opacity:0.7}
+.form-actions{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.15s;border:1px solid var(--border);background:var(--surface);color:var(--text);font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-dark)}
+.btn.danger{color:var(--danger);border-color:var(--danger-light)}
+.btn.danger:hover{background:var(--danger-light)}
+.btn.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn.whatsapp{background:#25D366;color:#fff;border-color:#25D366}
+.btn.whatsapp:hover{background:#1da851}
+.btn.sm{padding:4px 10px;font-size:11px}
+.btn svg{width:13px;height:13px}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.table-toolbar{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.table-toolbar input,.table-toolbar select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 11px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif}
+.table-toolbar input{flex:1;min-width:140px}
+.table-toolbar input:focus,.table-toolbar select:focus{outline:none;border-color:var(--accent)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--surface2)}
+th{padding:8px 11px;text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 11px;font-size:12px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface2)}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.03em}
+.badge.agenzia{background:var(--gold-light);color:var(--warn)}
+.badge.diretta{background:var(--accent-light);color:var(--accent-dark)}
+.badge.attesa{background:var(--warn-light);color:var(--warn);cursor:pointer}
+.badge.ricevuto{background:var(--accent-light);color:var(--accent-dark);cursor:pointer}
+.alert{padding:11px 14px;border-radius:var(--radius-sm);font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:9px}
+.alert svg{width:15px;height:15px;flex-shrink:0;margin-top:1px}
+.alert.info{background:var(--accent-light);color:var(--accent-dark);border:1px solid var(--accent)}
+.alert.warn{background:var(--warn-light);color:var(--warn);border:1px solid #D4A478}
+.alert.success{background:var(--accent-light);color:var(--accent-dark);border:1px solid var(--accent)}
+.alert.danger{background:var(--danger-light);color:var(--danger);border:1px solid #E8A0A0}
+.alert.payment-delay{background:var(--gold-light);color:var(--warn);border:1px solid var(--gold)}
+.preview-box{background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:11px 14px;font-size:13px;color:var(--accent-dark);margin-top:12px;display:none}
+.spese-row{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:8px}
+.spese-row label{font-size:13px;color:var(--text2);font-weight:500}
+.spese-row input{width:120px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;text-align:right;color:var(--text);font-family:'DM Sans',sans-serif}
+.camere-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.camera-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.camera-card.occupata{border-color:var(--danger);background:var(--danger-light)}
+.camera-card.libera{border-color:var(--accent);background:var(--accent-light)}
+.camera-card.pulizia{border-color:var(--gold);background:var(--gold-light)}
+.camera-card.manutenzione{border-color:var(--blue);background:var(--blue-light)}
+.camera-name{font-size:15px;font-family:'DM Serif Display',serif;margin-bottom:6px}
+.camera-status{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:7px}
+.camera-card.occupata .camera-status{background:var(--danger);color:#fff}
+.camera-card.libera .camera-status{background:var(--accent);color:#fff}
+.camera-card.pulizia .camera-status{background:var(--gold);color:#fff}
+.camera-card.manutenzione .camera-status{background:var(--blue);color:#fff}
+.camera-info{font-size:11px;color:var(--text3);line-height:1.5}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day-label{text-align:center;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);padding:7px 3px}
+.cal-day{min-height:70px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px;overflow:hidden}
+.cal-day.empty{background:transparent;border-color:transparent}
+.cal-day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.cal-day-num{font-weight:600;font-size:12px;color:var(--text2);margin-bottom:2px}
+.cal-day.today .cal-day-num{color:var(--accent)}
+.cal-event{padding:1px 4px;border-radius:2px;font-size:9px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cal-event.checkin{background:var(--accent);color:#fff}
+.cal-event.checkout{background:var(--gold);color:#fff}
+.cal-event.soggiorno{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.cal-event.pulizia-ev{background:var(--blue);color:#fff}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px;margin-bottom:14px}
+.staff-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:11px}
+.staff-card.available{border-color:var(--accent);background:var(--accent-light)}
+.staff-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:17px;color:#fff;flex-shrink:0}
+.staff-info{flex:1}
+.staff-name{font-weight:600;font-size:13px}
+.staff-rate{font-size:11px;color:var(--text3);margin-top:1px}
+.modal-overlay{position:fixed;inset:0;background:rgba(26,22,18,0.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:var(--radius);padding:26px;max-width:520px;width:100%;box-shadow:0 16px 60px rgba(0,0,0,0.2);transform:translateY(20px);transition:transform 0.2s;border:1px solid var(--border)}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-title{font-size:19px;margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
+.modal-actions{display:flex;gap:9px;margin-top:18px;justify-content:flex-end}
+.wa-preview{background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:12px;font-size:11px;line-height:1.7;color:var(--accent-dark);font-family:monospace;white-space:pre-wrap;margin:10px 0;max-height:180px;overflow-y:auto}
+.report-box{background:var(--accent-dark);border-radius:var(--radius);padding:20px 26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;margin-bottom:18px}
+.report-box-item{text-align:center}
+.report-box-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.45);margin-bottom:5px}
+.report-box-value{font-family:'DM Serif Display',serif;font-size:20px;color:#fff}
+.report-box-value.green{color:#6fcf97}
+.report-box-value.red{color:#eb5757}
+.report-box-value.gold{color:#e8d5a3}
+.scadenza-item{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:7px;gap:10px;flex-wrap:wrap}
+.scadenza-item.scaduta{border-color:var(--danger);background:var(--danger-light)}
+.scadenza-item.vicina{border-color:var(--gold);background:var(--gold-light)}
+.occ-bar{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:5px}
+.occ-bar-fill{height:100%;background:var(--accent);border-radius:4px}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--accent-dark);color:#fff;padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;max-width:310px;border-left:3px solid var(--gold)}
+.toast.show{transform:translateY(0);opacity:1}
+.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+@media(max-width:900px){.kpi-row{grid-template-columns:1fr 1fr}.camere-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}.form-grid.four{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><h1>B&amp;B Pro</h1><span>Gestionale Completo</span></div>
+  <nav class="nav">
+    <div class="nav-group-label">Panoramica</div>
+    <button class="nav-item active" onclick="showSection(&#39;dashboard&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>Dashboard</button>
+    <button class="nav-item" onclick="showSection(&#39;camere&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Stato camere</button>
+    <button class="nav-item" onclick="showSection(&#39;calendario&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Calendario</button>
+    <div class="nav-group-label">Prenotazioni</div>
+    <button class="nav-item" onclick="showSection(&#39;nuova&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Nuova prenotazione</button>
+    <button class="nav-item" onclick="showSection(&#39;prenotazioni&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>Tutte le prenotazioni</button>
+    <button class="nav-item" onclick="showSection(&#39;correzioni&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Correggi prenotazione</button>
+    <div class="nav-group-label">Pulizie</div>
+    <button class="nav-item" onclick="showSection(&#39;pulizie&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 14.5L3 21"></path><path d="M14.5 9.5l-5 5"></path><path d="M21 3l-6.5 6.5"></path><circle cx="17" cy="7" r="3"></circle></svg>Pianifica pulizie</button>
+    <button class="nav-item" onclick="showSection(&#39;servizio&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Collaboratrici</button>
+    <div class="nav-group-label">Gestione</div>
+    <button class="nav-item" onclick="showSection(&#39;spese&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"></path></svg>Spese mensili</button>
+    <button class="nav-item" onclick="showSection(&#39;scadenze&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Scadenze</button>
+    <div class="nav-group-label">Analisi</div>
+    <button class="nav-item" onclick="showSection(&#39;statistiche&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4 4h2v14h-2z"></path></svg>Statistiche</button>
+    <button class="nav-item" onclick="showSection(&#39;report&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>Report mensile</button>
+    <button class="nav-item" onclick="showSection(&#39;sincronizza&#39;,this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg>Sincronizza</button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-stat"><div class="lbl">Totale incasso</div><div class="val" id="stat-incasso">€ 6182,50</div></div>
+    <div class="sidebar-stat"><div class="lbl">Netto proprietario</div><div class="val" id="stat-netto">€ 5312,72</div></div>
+  </div>
+</aside>
+<main class="main">
+
+<!-- DASHBOARD -->
+<section id="sec-dashboard" class="section active">
+  <div class="page-header"><h2>Dashboard</h2><p>Panoramica · Agenzia 18,30% · Diretta 8,30%</p></div>
+  <div id="payment-alerts" style="margin-bottom:4px"><div class="alert payment-delay" style="margin:0 0 14px"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg><div><strong>Pagamenti attesi a Luglio 2026</strong> — 2 prenotazioni agenzia per € 643,72</div></div></div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="lbl">Incassi lordi</div><div class="val green" id="kpi-incasso">€ 6182,50</div><div class="sub" id="kpi-incasso-sub">12 prenotazioni</div></div>
+    <div class="kpi-card"><div class="lbl">Commissioni totali</div><div class="val amber" id="kpi-comm">€ 869,78</div></div>
+    <div class="kpi-card"><div class="lbl">Netto proprietario</div><div class="val green" id="kpi-netto">€ 5312,72</div><div class="sub">Totale storico</div></div>
+    <div class="kpi-card"><div class="lbl">Incasso questo mese</div><div class="val green" id="kpi-mese">€ 830,47</div><div class="sub" id="kpi-mese-sub">Giugno 2026</div></div>
+  </div>
+  <div class="camere-grid" id="dash-camere"><div class="camera-card libera"><div class="camera-name">✅ Mono Suite</div><div class="camera-status">Libera</div></div><div class="camera-card libera"><div class="camera-name">✅ Mono Home</div><div class="camera-status">Libera</div></div><div class="camera-card libera"><div class="camera-name">✅ Harmony</div><div class="camera-status">Libera</div></div><div class="camera-card libera"><div class="camera-name">✅ Suite</div><div class="camera-status">Libera</div></div></div>
+  <div class="form-card"><h3>🚪 Check-out di oggi</h3><div id="dash-checkout-oggi"><div class="empty-state" style="padding:14px">Nessun check-out oggi.</div></div></div>
+  <div class="form-card"><h3>📆 Prossimi check-out (7 giorni)</h3><div id="dash-checkout-prox"><div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--gold-light);border:1px solid #D4A478;border-radius:var(--radius-sm);margin-bottom:7px;flex-wrap:wrap;gap:9px"><div><div style="font-weight:600;font-size:13px">undefined — SEIBOTH WOLFGANG</div><div style="font-size:11px;color:var(--text3)">Check-out: 15/06/2026 · 6 notti</div></div></div></div></div>
+  <div class="form-card"><h3>🧹 Pulizie programmate oggi</h3><div id="dash-pulizie-oggi"><div class="empty-state" style="padding:14px">Nessuna pulizia oggi.</div></div></div>
+  <div class="form-card"><h3>⏰ Scadenze imminenti (30 giorni)</h3><div id="dash-scadenze"><div class="empty-state" style="padding:14px">Nessuna scadenza nei prossimi 30 giorni.</div></div></div>
+  <div class="table-wrap">
+    <div class="table-toolbar">
+      <input type="text" id="search-dash" placeholder="Cerca prenotazione..." oninput="renderDash()">
+      <button class="btn primary" onclick="showSection(&#39;nuova&#39;,null)">+ Nuova</button>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>N°</th><th>Camera</th><th>Ospite</th><th>Check-in</th><th>Notti</th><th>Fonte</th><th>Totale</th><th>Netto</th><th>Pag. a</th><th>Stato</th><th></th></tr></thead>
+      <tbody id="dash-tbody"><tr><td style="font-weight:600">150642 HARMONY</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>CLAUDIA GIUNCO</td><td>11/09/2026</td><td>2n</td><td><span class="badge diretta">diretta</span></td><td>€ 194,00</td><td><strong style="color:var(--accent)">€ 177,88</strong></td><td>Settembre 2026</td><td><span class="badge attesa" onclick="toggleStato(1)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(1)">Elimina</button></td></tr><tr><td style="font-weight:600">150642 COMFORT</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>CLAUDIA GIUNCO</td><td>11/09/2026</td><td>2n</td><td><span class="badge diretta">diretta</span></td><td>€ 194,00</td><td><strong style="color:var(--accent)">€ 177,88</strong></td><td>Settembre 2026</td><td><span class="badge attesa" onclick="toggleStato(2)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(2)">Elimina</button></td></tr><tr><td style="font-weight:600">157726</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>CRIVELLI GIULIA</td><td>10/08/2026</td><td>11n</td><td><span class="badge agenzia">agenzia</span></td><td>€ 1179,50</td><td><strong style="color:var(--accent)">€ 829,77</strong></td><td>Settembre 2026</td><td><span class="badge attesa" onclick="toggleStato(3)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(3)">Elimina</button></td></tr><tr><td style="font-weight:600">153392</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>ANTONIO PITOCCO</td><td>09/07/2026</td><td>8n</td><td><span class="badge diretta">diretta</span></td><td>€ 586,00</td><td><strong style="color:var(--accent)">€ 537,30</strong></td><td>Agosto 2026</td><td><span class="badge attesa" onclick="toggleStato(4)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(4)">Elimina</button></td></tr><tr><td style="font-weight:600">156773</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>ALESSIO MICCOLI</td><td>04/07/2026</td><td>1n</td><td><span class="badge agenzia">agenzia</span></td><td>€ 170,00</td><td><strong style="color:var(--accent)">€ 138,87</strong></td><td>Agosto 2026</td><td><span class="badge attesa" onclick="toggleStato(5)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(5)">Elimina</button></td></tr><tr><td style="font-weight:600">154705</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>PAOLO GRASSO</td><td>30/06/2026</td><td>19n</td><td><span class="badge diretta">diretta</span></td><td>€ 1463,00</td><td><strong style="color:var(--accent)">€ 1341,42</strong></td><td>Luglio 2026</td><td><span class="badge attesa" onclick="toggleStato(6)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(6)">Elimina</button></td></tr><tr><td style="font-weight:600">141957</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>NEROFOLK PENNY</td><td>23/06/2026</td><td>4n</td><td><span class="badge agenzia">agenzia</span></td><td>€ 290,00</td><td><strong style="color:var(--accent)">€ 236,90</strong></td><td>Luglio 2026</td><td><span class="badge attesa" onclick="toggleStato(7)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(7)">Elimina</button></td></tr><tr><td style="font-weight:600">150192</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>COSIMO CANADA</td><td>15/06/2026</td><td>9n</td><td><span class="badge diretta">diretta</span></td><td>€ 693,00</td><td><strong style="color:var(--accent)">€ 635,41</strong></td><td>Luglio 2026</td><td><span class="badge attesa" onclick="toggleStato(8)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(8)">Elimina</button></td></tr><tr><td style="font-weight:600">154836</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>SEIBOTH WOLFGANG</td><td>09/06/2026</td><td>6n</td><td><span class="badge agenzia">agenzia</span></td><td>€ 498,00</td><td><strong style="color:var(--accent)">€ 406,82</strong></td><td>Luglio 2026</td><td><span class="badge attesa" onclick="toggleStato(9)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(9)">Elimina</button></td></tr><tr><td style="font-weight:600">walter marrazza</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>walter marrazza</td><td>03/06/2026</td><td>1n</td><td><span class="badge diretta">diretta</span></td><td>€ 127,00</td><td><strong style="color:var(--accent)">€ 107,95</strong></td><td>Giugno 2026</td><td><span class="badge ricevuto" onclick="toggleStato(10)">✓ Ricevuto</span></td><td><button class="btn sm danger" onclick="eliminaPren(10)">Elimina</button></td></tr><tr><td style="font-weight:600">157216 HARMONY</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>NUNZIO FORLEO</td><td>30/05/2026</td><td>7n</td><td><span class="badge diretta">diretta</span></td><td>€ 394,00</td><td><strong style="color:var(--accent)">€ 361,26</strong></td><td>Giugno 2026</td><td><span class="badge attesa" onclick="toggleStato(11)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(11)">Elimina</button></td></tr><tr><td style="font-weight:600">157216 COMFORT</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">—</span></td><td>NUNZIO FORLEO</td><td>30/05/2026</td><td>7n</td><td><span class="badge diretta">diretta</span></td><td>€ 394,00</td><td><strong style="color:var(--accent)">€ 361,26</strong></td><td>Giugno 2026</td><td><span class="badge attesa" onclick="toggleStato(12)">In attesa</span></td><td><button class="btn sm danger" onclick="eliminaPren(12)">Elimina</button></td></tr></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- STATO CAMERE -->
+<section id="sec-camere" class="section">
+  <div class="page-header"><h2>Stato camere</h2><p>Situazione in tempo reale delle 4 camere</p></div>
+  <div class="camere-grid" id="camere-grid-full"></div>
+  <div class="form-card">
+    <h3>Modifica stato manuale</h3>
+    <div class="form-grid four">
+      <div class="field"><label>Camera</label><select id="cam-sel"><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select></div>
+      <div class="field"><label>Nuovo stato</label><select id="cam-stato-sel"><option value="libera">Libera</option><option value="occupata">Occupata</option><option value="pulizia">In pulizia</option><option value="manutenzione">Manutenzione</option></select></div>
+      <div class="field"><label>Note</label><input id="cam-note" type="text" placeholder="es. guasto riscaldamento"></div>
+      <div class="field"><label>&nbsp;</label><button class="btn primary" onclick="aggiornaCameraManuale()">Aggiorna stato</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDARIO -->
+<section id="sec-calendario" class="section">
+  <div class="page-header"><h2>Calendario</h2><p>Check-in, check-out e pulizie mese per mese</p></div>
+  <div class="form-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:9px">
+      <button class="btn" onclick="cambiaCalMese(-1)">‹ Precedente</button>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <h3 id="cal-title" style="font-size:19px">—</h3>
+        <select id="cal-camera-filter" onchange="renderCalendario()" style="padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:var(--surface2);font-family:&#39;DM Sans&#39;,sans-serif">
+          <option value="">Tutte le camere</option><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option>
+        </select>
+      </div>
+      <button class="btn" onclick="cambiaCalMese(1)">Successivo ›</button>
+    </div>
+    <div style="display:flex;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+      <span style="font-size:11px;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:11px;height:11px;background:var(--accent);border-radius:2px"></span>Check-in</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:11px;height:11px;background:var(--gold);border-radius:2px"></span>Check-out</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:11px;height:11px;background:var(--surface2);border:1px solid var(--border);border-radius:2px"></span>Soggiorno</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:11px;height:11px;background:var(--blue);border-radius:2px"></span>Pulizia</span>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</section>
+
+<!-- NUOVA PRENOTAZIONE -->
+<section id="sec-nuova" class="section">
+  <div class="page-header"><h2>Nuova prenotazione</h2><p>Extra automatici: 7€/notte (corrente) + 30€ (pulizie)</p></div>
+  <div class="alert info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div><strong>Commissioni:</strong> Agenzia <strong>18,30%</strong> · Diretta <strong>8,30%</strong> · Extra inclusi prima del calcolo</div></div>
+  <div class="form-card">
+    <h3>Dati prenotazione</h3>
+    <div class="form-grid four">
+      <div class="field"><label>N° Prenotazione *</label><input id="f-num" type="text" placeholder="es. 157729"></div>
+      <div class="field"><label>Camera *</label><select id="f-camera"><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select></div>
+      <div class="field"><label>Fonte *</label><select id="f-fonte" onchange="aggiornaPreview()"><option value="agenzia">Agenzia (18,30%)</option><option value="diretta">Diretta (8,30%)</option></select></div>
+      <div class="field"><label>Nome ospite</label><input id="f-nome" type="text" placeholder="es. Mario Rossi"></div>
+      <div class="field"><label>Check-in *</label><input id="f-cin" type="date" onchange="onDateChange()"></div>
+      <div class="field"><label>Check-out *</label><input id="f-cout" type="date" onchange="onDateChange()"></div>
+      <div class="field"><label>N° notti (auto)</label><input id="f-notti" type="number" readonly=""></div>
+      <div class="field"><label>Importo lordo (€) *</label><input id="f-imp" type="number" step="0.01" placeholder="0.00" oninput="aggiornaPreview()"></div>
+      <div class="field"><label>Extra (auto)</label><input id="f-extra" type="number" readonly=""></div>
+      <div class="field"><label>Totale (auto)</label><input id="f-totale" type="number" readonly=""></div>
+      <div class="field"><label>Commissione (auto)</label><input id="f-comm-display" type="number" readonly=""></div>
+      <div class="field"><label>Netto proprietario (auto)</label><input id="f-netto-display" type="number" readonly=""></div>
+      <div class="field"><label>Note</label><input id="f-note" type="text" placeholder="es. TRASFERTISTI..."></div>
+    </div>
+    <div id="preview-box" class="preview-box"></div>
+    <div class="form-actions">
+      <button class="btn primary" onclick="aggiungi()">✓ Aggiungi prenotazione</button>
+      <button class="btn" onclick="resetForm()">Pulisci</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRENOTAZIONI -->
+<section id="sec-prenotazioni" class="section">
+  <div class="page-header"><h2>Tutte le prenotazioni</h2><p>Clicca su "In attesa" per segnare il pagamento ricevuto</p></div>
+  <div class="table-wrap">
+    <div class="table-toolbar">
+      <input type="text" id="search-pren" placeholder="Cerca numero, ospite..." oninput="renderLista()">
+      <select id="filter-camera" onchange="renderLista()"><option value="">Tutte le camere</option><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select>
+      <select id="filter-fonte" onchange="renderLista()"><option value="">Tutte le fonti</option><option value="agenzia">Agenzia</option><option value="diretta">Diretta</option></select>
+      <select id="filter-stato" onchange="renderLista()"><option value="">Tutti gli stati</option><option value="attesa">In attesa</option><option value="ricevuto">Ricevuto</option></select>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>N°</th><th>Camera</th><th>Ospite</th><th>Check-in</th><th>Check-out</th><th>Notti</th><th>Fonte</th><th>Lordo</th><th>Extra</th><th>Totale</th><th>Comm.%</th><th>Comm.</th><th>Netto</th><th>Pag. a</th><th>Stato</th><th></th></tr></thead>
+      <tbody id="pren-tbody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- CORREGGI -->
+<section id="sec-correzioni" class="section">
+  <div class="page-header"><h2>Correggi prenotazione</h2><p>Modifica dati errati · i calcoli si aggiornano in tempo reale</p></div>
+  <div class="alert warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Seleziona una prenotazione da correggere.</div>
+  <div class="form-card"><div class="field" style="max-width:400px"><label>Seleziona prenotazione</label><select id="corr-select" onchange="caricaCorrezione()"><option value="">— Seleziona</option></select></div></div>
+  <div id="corr-form-container" style="display:none">
+    <div class="form-card">
+      <h3>Modifica dati</h3>
+      <div class="form-grid four">
+        <div class="field"><label>N° Prenotazione</label><input id="corr-num" type="text" readonly=""></div>
+        <div class="field"><label>Camera</label><select id="corr-camera"><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select></div>
+        <div class="field"><label>Fonte</label><select id="corr-fonte" onchange="aggiornaAnteprimaCorr()"><option value="agenzia">Agenzia (18,30%)</option><option value="diretta">Diretta (8,30%)</option></select></div>
+        <div class="field"><label>Nome ospite</label><input id="corr-nome" type="text"></div>
+        <div class="field"><label>Check-in</label><input id="corr-cin" type="date" onchange="aggiornaAnteprimaCorr()"></div>
+        <div class="field"><label>Check-out</label><input id="corr-cout" type="date" onchange="aggiornaAnteprimaCorr()"></div>
+        <div class="field"><label>N° notti (auto)</label><input id="corr-notti" type="number" readonly=""></div>
+        <div class="field"><label>Importo lordo €</label><input id="corr-imp" type="number" step="0.01" oninput="aggiornaAnteprimaCorr()"></div>
+        <div class="field"><label>FATT BH € <em style="font-size:10px;color:var(--text3)">(opzionale)</em></label><input id="corr-fattbh" type="number" step="0.01" placeholder="se presente" oninput="aggiornaAnteprimaCorr()"></div>
+        <div class="field"><label>Note</label><input id="corr-note" type="text"></div>
+      </div>
+      <div id="corr-preview" class="preview-box"></div>
+      <div class="form-actions">
+        <button class="btn primary" onclick="salvaCorrezione()">✓ Salva correzione</button>
+        <button class="btn danger" onclick="eliminaDaCorrezione()">Elimina</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIANIFICA PULIZIE -->
+<section id="sec-pulizie" class="section">
+  <div class="page-header"><h2>Pianifica pulizie</h2><p>Programma pulizie ordinarie e straordinarie · notifica le collaboratrici via WhatsApp</p></div>
+  <div class="form-card">
+    <h3>Nuova pulizia programmata</h3>
+    <div class="form-grid four">
+      <div class="field"><label>Camera *</label><select id="pul-camera"><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select></div>
+      <div class="field"><label>Data *</label><input id="pul-data" type="date"></div>
+      <div class="field"><label>Tipo pulizia *</label><select id="pul-tipo" onchange="aggiornaCostoPulizia()"><option value="ordinaria">Ordinaria (post checkout)</option><option value="cambio">Cambio biancheria</option><option value="approfondita">Pulizia approfondita</option><option value="straordinaria">Straordinaria</option></select></div>
+      <div class="field"><label>Costo (€)</label><input id="pul-costo" type="number" step="0.01" placeholder="auto da tariffa"></div>
+      <div class="field"><label>Collaboratrice</label><select id="pul-staff"><option value="">— Seleziona</option></select></div>
+      <div class="field"><label>Orario</label><input id="pul-orario" type="time" value="10:00"></div>
+      <div class="field"><label>Note</label><input id="pul-note" type="text" placeholder="es. cambia anche i cuscini"></div>
+      <div class="field"><label>&nbsp;</label><button class="btn primary" onclick="aggiungiPulizia()">✓ Programma + Notifica WA</button></div>
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>Tariffe fisse per tipo di pulizia</h3>
+    <div class="form-grid four">
+      <div class="field"><label>Ordinaria (€)</label><input id="tariffa-ordinaria" type="number" step="0.01" placeholder="es. 30" oninput="salvaTariffe()"></div>
+      <div class="field"><label>Cambio biancheria (€)</label><input id="tariffa-cambio" type="number" step="0.01" placeholder="es. 20" oninput="salvaTariffe()"></div>
+      <div class="field"><label>Approfondita (€)</label><input id="tariffa-approfondita" type="number" step="0.01" placeholder="es. 50" oninput="salvaTariffe()"></div>
+      <div class="field"><label>Straordinaria (€)</label><input id="tariffa-straordinaria" type="number" step="0.01" placeholder="es. 70" oninput="salvaTariffe()"></div>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin-top:8px">✓ Le tariffe vengono precompilate automaticamente alla selezione del tipo</p>
+  </div>
+  <div class="table-wrap">
+    <div class="table-toolbar">
+      <input type="text" id="search-pul" placeholder="Cerca pulizie..." oninput="renderPulizie()">
+      <select id="filter-pul-camera" onchange="renderPulizie()"><option value="">Tutte le camere</option><option value="Mono Suite">Mono Suite</option><option value="Mono Home">Mono Home</option><option value="Harmony">Harmony</option><option value="Suite">Suite</option></select>
+      <select id="filter-pul-stato" onchange="renderPulizie()"><option value="">Tutti</option><option value="programmata">Programmate</option><option value="completata">Completate</option></select>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Data</th><th>Orario</th><th>Camera</th><th>Tipo</th><th>Collaboratrice</th><th>Costo</th><th>Note</th><th>Stato</th><th></th></tr></thead>
+      <tbody id="pulizie-tbody"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- COLLABORATRICI -->
+<section id="sec-servizio" class="section">
+  <div class="page-header"><h2>Collaboratrici</h2><p>Gestisci le addette alle pulizie · report pagamenti</p></div>
+  <div class="form-card">
+    <h3>Aggiungi collaboratrice</h3>
+    <div class="form-grid four">
+      <div class="field"><label>Nome *</label><input id="s-nome" type="text" placeholder="Nome e cognome"></div>
+      <div class="field"><label>Telefono WhatsApp *</label><input id="s-tel" type="text" placeholder="+39 333 1234567"></div>
+      <div class="field"><label>Tariffa oraria (€)</label><input id="s-tariffa" type="number" step="0.50" value="10"></div>
+      <div class="field"><label>&nbsp;</label><button class="btn primary" onclick="aggiungiStaff()">Aggiungi</button></div>
+    </div>
+  </div>
+  <div class="form-card"><h3>Collaboratrici attive</h3><div class="staff-grid" id="staff-grid"><div class="empty-state" style="padding:16px;grid-column:1/-1">Nessuna collaboratrice.</div></div></div>
+  <div class="form-card"><h3>🧾 Report pagamenti</h3><div id="staff-report-list"><div class="empty-state" style="padding:16px">Nessun lavoro registrato.</div></div></div>
+</section>
+
+<!-- SPESE MENSILI -->
+<section id="sec-spese" class="section">
+  <div class="page-header"><h2>Spese mensili</h2><p>Tutte le uscite · pulizie aggiornate automaticamente</p></div>
+  <div class="form-card">
+    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+      <div class="field" style="max-width:220px"><label>Mese</label><select id="spese-mese" onchange="renderSpese()"><option value="Gennaio 2026">Gennaio 2026</option><option value="Febbraio 2026">Febbraio 2026</option><option value="Marzo 2026">Marzo 2026</option><option value="Aprile 2026">Aprile 2026</option><option value="Maggio 2026">Maggio 2026</option><option value="Giugno 2026">Giugno 2026</option><option value="Luglio 2026">Luglio 2026</option><option value="Agosto 2026">Agosto 2026</option><option value="Settembre 2026">Settembre 2026</option><option value="Ottobre 2026">Ottobre 2026</option><option value="Novembre 2026">Novembre 2026</option><option value="Dicembre 2026">Dicembre 2026</option></select></div>
+      <div style="padding:8px 14px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:12px;color:var(--text3)">✓ Salvataggio automatico</div>
+    </div>
+  </div>
+  <div class="form-card"><h3>Voci di spesa</h3><div id="spese-form"></div></div>
+  <div class="form-card"><h3>Riepilogo</h3><div id="riepilogo-spese"></div></div>
+</section>
+
+<!-- SCADENZE -->
+<section id="sec-scadenze" class="section">
+  <div class="page-header"><h2>Scadenze</h2><p>Tasse, assicurazioni, licenze · avviso in dashboard 30 giorni prima</p></div>
+  <div class="form-card">
+    <h3>Aggiungi scadenza</h3>
+    <div class="form-grid">
+      <div class="field"><label>Descrizione *</label><input id="sc-desc" type="text" placeholder="es. Rinnovo assicurazione"></div>
+      <div class="field"><label>Data scadenza *</label><input id="sc-data" type="date"></div>
+      <div class="field"><label>Importo (€)</label><input id="sc-imp" type="number" step="0.01" placeholder="opzionale"></div>
+      <div class="field"><label>Categoria</label><select id="sc-cat"><option value="Tasse">Tasse</option><option value="Assicurazione">Assicurazione</option><option value="Licenza">Licenza / Permessi</option><option value="Manutenzione">Manutenzione</option><option value="Altro">Altro</option></select></div>
+      <div class="field"><label>Note</label><input id="sc-note" type="text" placeholder="opzionale"></div>
+      <div class="field"><label>&nbsp;</label><button class="btn primary" onclick="aggiungiScadenza()">Aggiungi scadenza</button></div>
+    </div>
+  </div>
+  <div id="scadenze-list"></div>
+</section>
+
+<!-- STATISTICHE -->
+<section id="sec-statistiche" class="section">
+  <div class="page-header"><h2>Statistiche</h2><p>Occupazione, tariffe medie, confronto mensile</p></div>
+  <div id="stats-container"></div>
+</section>
+
+<!-- REPORT MENSILE -->
+<section id="sec-report" class="section">
+  <div class="page-header"><h2>Report mensile</h2><p>Analisi completa · esporta in PDF</p></div>
+  <div class="form-card">
+    <div style="display:flex;gap:11px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px">
+      <div class="field" style="max-width:220px"><label>Mese</label><select id="report-mese" onchange="renderReport()"><option value="Gennaio 2026">Gennaio 2026</option><option value="Febbraio 2026">Febbraio 2026</option><option value="Marzo 2026">Marzo 2026</option><option value="Aprile 2026">Aprile 2026</option><option value="Maggio 2026">Maggio 2026</option><option value="Giugno 2026">Giugno 2026</option><option value="Luglio 2026">Luglio 2026</option><option value="Agosto 2026">Agosto 2026</option><option value="Settembre 2026">Settembre 2026</option><option value="Ottobre 2026">Ottobre 2026</option><option value="Novembre 2026">Novembre 2026</option><option value="Dicembre 2026">Dicembre 2026</option></select></div>
+      <button class="btn gold" onclick="exportPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Esporta PDF</button>
+    </div>
+    <div id="report-container"></div>
+  </div>
+</section>
+
+<!-- SINCRONIZZA -->
+<section id="sec-sincronizza" class="section">
+  <div class="page-header"><h2>Sincronizza</h2><p>Trasferisci i dati tra PC e smartphone via QR code o backup</p></div>
+  <div class="form-card">
+    <h3>📱 QR Code</h3>
+    <p style="color:var(--text3);font-size:13px;margin-bottom:14px">Genera il QR code e scansionalo con lo smartphone per sincronizzare tutti i dati.</p>
+    <div style="display:flex;gap:11px;margin-bottom:18px;flex-wrap:wrap">
+      <button class="btn primary" onclick="generaQR()" style="flex:1;min-width:150px;justify-content:center;padding:10px">📲 Genera QR Code</button>
+      <button class="btn" onclick="mostraInputLink()" style="flex:1;min-width:150px;justify-content:center;padding:10px">📷 Ho il link dallo smartphone</button>
+    </div>
+    <div id="qr-container"></div>
+  </div>
+  <div class="form-card">
+    <h3>💾 Backup / Ripristino</h3>
+    <p style="color:var(--text3);font-size:13px;margin-bottom:14px">Scarica una copia di sicurezza o ripristina dati precedenti.</p>
+    <div style="display:flex;gap:11px;flex-wrap:wrap">
+      <button class="btn" onclick="esportaDati()" style="flex:1;min-width:130px;justify-content:center">⬇️ Scarica backup</button>
+      <button class="btn" onclick="document.getElementById(&#39;import-file&#39;).click()" style="flex:1;min-width:130px;justify-content:center">⬆️ Ripristina backup</button>
+      <input type="file" id="import-file" style="display:none" accept=".json" onchange="importaDati(event)">
+    </div>
+    <div id="import-status" style="margin-top:11px"></div>
+  </div>
+  <div class="form-card">
+    <h3>📊 Stato dati</h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:3px">Prenotazioni</div><div style="font-size:26px;font-weight:600;color:var(--accent)" id="info-pren">0</div></div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:3px">Pulizie</div><div style="font-size:26px;font-weight:600;color:var(--accent)" id="info-pul">0</div></div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:3px">Collaboratrici</div><div style="font-size:26px;font-weight:600;color:var(--accent)" id="info-staff">0</div></div>
+      <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:3px">Scadenze</div><div style="font-size:26px;font-weight:600;color:var(--accent)" id="info-sc">0</div></div>
+    </div>
+    <div style="margin-top:9px;font-size:11px;color:var(--text3)">Ultimo aggiornamento: <strong id="info-update">mai</strong></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- MODAL WhatsApp -->
+<div class="modal-overlay" id="wa-modal">
+  <div class="modal">
+    <h3 class="modal-title">📱 Notifica WhatsApp</h3>
+    <div class="modal-sub" id="wa-modal-sub">Anteprima messaggio</div>
+    <div class="wa-preview" id="wa-preview-text"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="chiudiModal(&#39;wa-modal&#39;)">Annulla</button>
+      <button class="btn whatsapp" onclick="inviaWAPulizia()">📲 Invia WhatsApp</button>
+    </div>
+  </div>
+</div>
+<!-- MODAL pagamento staff -->
+<div class="modal-overlay" id="pag-modal">
+  <div class="modal">
+    <h3 class="modal-title">💰 Segna pagamento</h3>
+    <div class="modal-sub" id="pag-modal-sub"></div>
+    <div class="field" style="margin-bottom:12px"><label>Data pagamento</label><input type="date" id="pag-data"></div>
+    <div class="field"><label>Note (opzionale)</label><input type="text" id="pag-note" placeholder="es. pagato in contanti"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="chiudiModal(&#39;pag-modal&#39;)">Annulla</button>
+      <button class="btn primary" onclick="confermaPagamento()">✓ Conferma pagamento</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const MESI=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+const ANNO=new Date().getFullYear();
+const COMM={agenzia:18.30,diretta:8.30};
+const EXTRA={corrente_per_notte:7.00,pulizie:30.00};
+const CAMERE=['Mono Suite','Mono Home','Harmony','Suite'];
+const TARIFFE_DEFAULT={ordinaria:30,cambio:20,approfondita:50,straordinaria:70};
+const SPESE_VOCI=[
+  {id:'corrente',label:'Corrente elettrica'},
+  {id:'acqua',label:'Acqua'},
+  {id:'gas',label:'Gas / Riscaldamento'},
+  {id:'internet',label:'Internet / TV'},
+  {id:'pulizie',label:'Pulizie (collaboratrici)',auto:true},
+  {id:'lavanderia',label:'Lavanderia'},
+  {id:'manutenzione',label:'Manutenzione e riparazioni'},
+  {id:'consumabili',label:'Prodotti pulizia / consumabili'},
+  {id:'iva',label:'IVA da versare'},
+  {id:'tasse',label:'Tasse e contributi'},
+  {id:'assicurazione',label:'Assicurazione'},
+  {id:'marketing',label:'Marketing e pubblicità'},
+  {id:'altro',label:'Altre spese'},
+];
+let dati={prenotazioni:[{"id":1,"num":"150642 HARMONY","cin":"2026-09-11","cout":"2026-09-13","nome":"CLAUDIA GIUNCO","imp":150,"fonte":"diretta","notti":2,"note":"","extra":{"corrente":14,"pulizie":30,"totale":44},"commissione":16.12,"netto":177.88,"totaleImponibile":194.0,"comm":8.31,"stato":"attesa","mesePag":"Settembre 2026"},{"id":2,"num":"150642 COMFORT","cin":"2026-09-11","cout":"2026-09-13","nome":"CLAUDIA GIUNCO","imp":150,"fonte":"diretta","notti":2,"note":"","extra":{"corrente":14,"pulizie":30,"totale":44},"commissione":16.12,"netto":177.88,"totaleImponibile":194.0,"comm":8.31,"stato":"attesa","mesePag":"Settembre 2026"},{"id":3,"num":"157726","cin":"2026-08-10","cout":"2026-08-21","nome":"CRIVELLI GIULIA","imp":1072.5,"fonte":"agenzia","notti":11,"note":"","extra":{"corrente":77,"pulizie":30,"totale":107},"commissione":349.73,"netto":829.77,"totaleImponibile":1179.5,"comm":18.31,"stato":"attesa","mesePag":"Settembre 2026"},{"id":4,"num":"153392","cin":"2026-07-09","cout":"2026-07-17","nome":"ANTONIO PITOCCO","imp":500,"fonte":"diretta","notti":8,"note":"","extra":{"corrente":56,"pulizie":30,"totale":86},"commissione":48.7,"netto":537.3,"totaleImponibile":586.0,"comm":8.31,"stato":"attesa","mesePag":"Agosto 2026"},{"id":5,"num":"156773","cin":"2026-07-04","cout":"2026-07-05","nome":"ALESSIO MICCOLI","imp":133,"fonte":"agenzia","notti":1,"note":"","extra":{"corrente":7,"pulizie":30,"totale":37},"commissione":31.13,"netto":138.87,"totaleImponibile":170.0,"comm":18.31,"stato":"attesa","mesePag":"Agosto 2026"},{"id":6,"num":"154705","cin":"2026-06-30","cout":"2026-07-19","nome":"PAOLO GRASSO","imp":1300,"fonte":"diretta","notti":19,"note":"","extra":{"corrente":133,"pulizie":30,"totale":163},"commissione":121.58,"netto":1341.42,"totaleImponibile":1463.0,"comm":8.31,"stato":"attesa","mesePag":"Luglio 2026"},{"id":7,"num":"141957","cin":"2026-06-23","cout":"2026-06-27","nome":"NEROFOLK PENNY","imp":232,"fonte":"agenzia","notti":4,"note":"","extra":{"corrente":28,"pulizie":30,"totale":58},"commissione":53.1,"netto":236.9,"totaleImponibile":290.0,"comm":18.31,"stato":"attesa","mesePag":"Luglio 2026"},{"id":8,"num":"150192","cin":"2026-06-15","cout":"2026-06-24","nome":"COSIMO CANADA","imp":600,"fonte":"diretta","notti":9,"note":"","extra":{"corrente":63,"pulizie":30,"totale":93},"commissione":57.59,"netto":635.41,"totaleImponibile":693.0,"comm":8.31,"stato":"attesa","mesePag":"Luglio 2026"},{"id":9,"num":"154836","cin":"2026-06-09","cout":"2026-06-15","nome":"SEIBOTH WOLFGANG","imp":426,"fonte":"agenzia","notti":6,"note":"","extra":{"corrente":42,"pulizie":30,"totale":72},"commissione":91.18,"netto":406.82,"totaleImponibile":498.0,"comm":18.31,"stato":"attesa","mesePag":"Luglio 2026"},{"id":10,"num":"walter marrazza","cin":"2026-06-03","cout":"2026-06-04","nome":"walter marrazza","imp":90,"fonte":"diretta","notti":1,"note":"blocco proprietario","extra":{"corrente":7,"pulizie":30,"totale":37},"commissione":19.05,"netto":107.95,"totaleImponibile":127.0,"comm":15,"stato":"ricevuto","mesePag":"Giugno 2026"},{"id":11,"num":"157216 HARMONY","cin":"2026-05-30","cout":"2026-06-06","nome":"NUNZIO FORLEO","imp":315,"fonte":"diretta","notti":7,"note":"TRASFERTISTI","extra":{"corrente":49,"pulizie":30,"totale":79},"commissione":32.74,"netto":361.26,"totaleImponibile":394.0,"comm":8.31,"stato":"attesa","mesePag":"Giugno 2026"},{"id":12,"num":"157216 COMFORT","cin":"2026-05-30","cout":"2026-06-06","nome":"NUNZIO FORLEO","imp":315,"fonte":"diretta","notti":7,"note":"TRASFERTISTI","extra":{"corrente":49,"pulizie":30,"totale":79},"commissione":32.74,"netto":361.26,"totaleImponibile":394.0,"comm":8.31,"stato":"attesa","mesePag":"Giugno 2026"}],spese:{},staff:[],pulizie:[],scadenze:[],pagamentiStaff:{},statiCamere:{},tariffePulizie:{...TARIFFE_DEFAULT}};
+let calMese=new Date().getMonth(),calAnno=new Date().getFullYear();
+let waCurrentPuliziaId=null,pagCurrentKey=null;
+const oggi=new Date();oggi.setHours(0,0,0,0);
+
+function carica(){
+  try{
+    const s=localStorage.getItem('bnb_pro_v1');
+    if(s){const l=JSON.parse(s);if(l&&l.prenotazioni){
+      dati=l;
+      if(!dati.spese)dati.spese={};
+      if(!dati.staff)dati.staff=[];
+      if(!dati.pulizie)dati.pulizie=[];
+      if(!dati.scadenze)dati.scadenze=[];
+      if(!dati.pagamentiStaff)dati.pagamentiStaff={};
+      if(!dati.statiCamere)dati.statiCamere={};
+      if(!dati.tariffePulizie)dati.tariffePulizie={...TARIFFE_DEFAULT};
+    }}
+  }catch(e){}
+}
+function salva(){localStorage.setItem('bnb_pro_v1',JSON.stringify(dati));localStorage.setItem('bnb_pro_v1_update',new Date().toLocaleString('it-IT'));}
+function fmt(n){return '€\u202f'+parseFloat(n||0).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtData(d){if(!d)return '—';const[y,m,g]=d.split('-');return g+'/'+m+'/'+y;}
+function dateToStr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function oggiStr(){return dateToStr(oggi);}
+function calcNotti(cin,cout){if(!cin||!cout)return 1;return Math.max(1,Math.round((new Date(cout)-new Date(cin))/86400000));}
+function calcExtra(notti){const c=notti*EXTRA.corrente_per_notte;return{corrente:c,pulizie:EXTRA.pulizie,totale:c+EXTRA.pulizie};}
+function calcTutto(imp,fonte,notti){const extra=calcExtra(notti);const tot=imp+extra.totale;const comm=tot*(COMM[fonte]/100);return{extra,commissione:comm,netto:tot-comm,totaleImponibile:tot,comm:COMM[fonte]};}
+function mesePagamento(cin,fonte){const d=new Date(cin);if(fonte==='agenzia')d.setMonth(d.getMonth()+1);return MESI[d.getMonth()]+' '+d.getFullYear();}
+function ymKey(meseLabel){const p=meseLabel.split(' ');return p[1]+'-'+String(MESI.indexOf(p[0])+1).padStart(2,'0');}
+function toast(msg,tipo){const t=document.getElementById('toast');t.textContent=msg;t.style.borderLeftColor=tipo==='danger'?'#8B1A1A':'var(--gold)';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+function apriModal(id){document.getElementById(id).classList.add('open');}
+function chiudiModal(id){document.getElementById(id).classList.remove('open');}
+
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('active');});
+  if(id==='dashboard')renderDash();
+  if(id==='camere')renderCamere();
+  if(id==='calendario')renderCalendario();
+  if(id==='prenotazioni')renderLista();
+  if(id==='correzioni')renderCorrezioni();
+  if(id==='pulizie'){renderPulizie();caricaStaffSelect();}
+  if(id==='servizio')renderServizio();
+  if(id==='spese')renderSpese();
+  if(id==='scadenze')renderScadenze();
+  if(id==='statistiche')renderStatistiche();
+  if(id==='report')renderReport();
+  if(id==='sincronizza')aggiornaSincInfo();
+}
+
+function getStatoCamera(camera){
+  const og=oggiStr();
+  const pren=dati.prenotazioni.find(p=>p.camera===camera&&p.cin<=og&&p.cout>og);
+  if(pren)return{stato:'occupata',info:pren.nome||pren.num,checkout:fmtData(pren.cout)};
+  const pulOggi=dati.pulizie.find(p=>p.camera===camera&&p.data===og&&p.stato==='programmata');
+  if(pulOggi)return{stato:'pulizia',info:pulOggi.tipo,orario:pulOggi.orario};
+  const man=dati.statiCamere[camera];
+  if(man&&man.stato&&man.stato!=='libera')return{stato:man.stato,info:man.note||''};
+  return{stato:'libera',info:''};
+}
+function renderCameraCard(camera){
+  const s=getStatoCamera(camera);
+  const emoji={libera:'✅',occupata:'🔴',pulizia:'🧹',manutenzione:'🔧'}[s.stato]||'✅';
+  const label={libera:'Libera',occupata:'Occupata',pulizia:'In pulizia',manutenzione:'Manutenzione'}[s.stato];
+  const info=s.stato==='occupata'?`Check-out: ${s.checkout}`:s.stato==='pulizia'?`${s.info} — ${s.orario||''}`:s.info||'';
+  return`<div class="camera-card ${s.stato}"><div class="camera-name">${emoji} ${camera}</div><div class="camera-status">${label}</div>${info?`<div class="camera-info">${info}</div>`:''}</div>`;
+}
+function renderCamere(){document.getElementById('camere-grid-full').innerHTML=CAMERE.map(c=>renderCameraCard(c)).join('');}
+function renderDashCamere(){document.getElementById('dash-camere').innerHTML=CAMERE.map(c=>renderCameraCard(c)).join('');}
+function aggiornaCameraManuale(){
+  const camera=document.getElementById('cam-sel').value;
+  const stato=document.getElementById('cam-stato-sel').value;
+  const note=document.getElementById('cam-note').value.trim();
+  dati.statiCamere[camera]={stato,note};salva();renderCamere();toast('✓ Stato camera aggiornato!');
+}
+
+function renderDash(){
+  const og=oggiStr();
+  const pm=(function(){const d=new Date(oggi.getFullYear(),oggi.getMonth()+1,1);return MESI[d.getMonth()]+' '+d.getFullYear();})();
+  const pagPm=dati.prenotazioni.filter(p=>p.fonte==='agenzia'&&p.mesePag===pm&&p.stato==='attesa');
+  document.getElementById('payment-alerts').innerHTML=pagPm.length?`<div class="alert payment-delay" style="margin:0 0 14px"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><div><strong>Pagamenti attesi a ${pm}</strong> — ${pagPm.length} prenotazioni agenzia per ${fmt(pagPm.reduce((s,p)=>s+p.netto,0))}</div></div>`:'';
+  const totI=dati.prenotazioni.reduce((s,p)=>s+(p.totaleImponibile||0),0);
+  const totC=dati.prenotazioni.reduce((s,p)=>s+(p.commissione||0),0);
+  const totN=dati.prenotazioni.reduce((s,p)=>s+(p.netto||0),0);
+  const meseOggi=MESI[oggi.getMonth()]+' '+oggi.getFullYear();
+  const pagM=dati.prenotazioni.filter(p=>p.mesePag===meseOggi).reduce((s,p)=>s+p.netto,0);
+  document.getElementById('kpi-incasso').textContent=fmt(totI);
+  document.getElementById('kpi-incasso-sub').textContent=dati.prenotazioni.length+' prenotazioni';
+  document.getElementById('kpi-comm').textContent=fmt(totC);
+  document.getElementById('kpi-netto').textContent=fmt(totN);
+  document.getElementById('kpi-mese').textContent=fmt(pagM);
+  document.getElementById('kpi-mese-sub').textContent=meseOggi;
+  document.getElementById('stat-incasso').textContent=fmt(totI);
+  document.getElementById('stat-netto').textContent=fmt(totN);
+  renderDashCamere();
+  const coOggi=dati.prenotazioni.filter(p=>p.cout===og);
+  document.getElementById('dash-checkout-oggi').innerHTML=coOggi.length?coOggi.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--danger-light);border:1px solid #E8A0A0;border-radius:var(--radius-sm);margin-bottom:8px;flex-wrap:wrap;gap:9px"><div><div style="font-weight:600;font-size:13px">🚪 ${p.camera} — ${p.nome||p.num}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Pren. ${p.num} · ${p.notti} notti</div></div><span class="badge ${p.stato}" onclick="toggleStato(${p.id})">${p.stato==='attesa'?'In attesa':'✓ Ricevuto'}</span></div>`).join(''):'<div class="empty-state" style="padding:14px">Nessun check-out oggi.</div>';
+  const prox=[];for(let i=1;i<=7;i++){const d=new Date(oggi);d.setDate(d.getDate()+i);const ds=dateToStr(d);prox.push(...dati.prenotazioni.filter(p=>p.cout===ds));}
+  document.getElementById('dash-checkout-prox').innerHTML=prox.length?prox.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--gold-light);border:1px solid #D4A478;border-radius:var(--radius-sm);margin-bottom:7px;flex-wrap:wrap;gap:9px"><div><div style="font-weight:600;font-size:13px">${p.camera} — ${p.nome||p.num}</div><div style="font-size:11px;color:var(--text3)">Check-out: ${fmtData(p.cout)} · ${p.notti} notti</div></div></div>`).join(''):'<div class="empty-state" style="padding:14px">Nessun check-out nei prossimi 7 giorni.</div>';
+  const pulOggi=dati.pulizie.filter(p=>p.data===og);
+  document.getElementById('dash-pulizie-oggi').innerHTML=pulOggi.length?pulOggi.map(p=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--blue-light);border:1px solid #A0C0E8;border-radius:var(--radius-sm);margin-bottom:7px;flex-wrap:wrap;gap:9px"><div><div style="font-weight:600;font-size:13px">🧹 ${p.camera} — ${p.tipo}</div><div style="font-size:11px;color:var(--text3)">Ore ${p.orario||'—'} · ${p.staffNome||'—'} · ${fmt(p.costo)}</div></div><span class="badge ${p.stato==='completata'?'ricevuto':'attesa'}" onclick="togglePulizia(${p.id})" style="cursor:pointer">${p.stato==='completata'?'✓ Completata':'Programmata'}</span></div>`).join(''):'<div class="empty-state" style="padding:14px">Nessuna pulizia oggi.</div>';
+  const tra30=new Date(oggi);tra30.setDate(tra30.getDate()+30);
+  const scImm=dati.scadenze.filter(s=>s.data&&new Date(s.data)<=tra30&&!s.completata).sort((a,b)=>new Date(a.data)-new Date(b.data));
+  document.getElementById('dash-scadenze').innerHTML=scImm.length?scImm.map(s=>{const d=new Date(s.data);const gg=Math.round((d-oggi)/86400000);const cl=gg<0?'scaduta':gg<=7?'vicina':'';return`<div class="scadenza-item ${cl}"><div><div style="font-weight:600;font-size:13px">${s.desc}</div><div style="font-size:11px;color:var(--text3)">${s.cat}${s.imp?' · '+fmt(s.imp):''}</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:600;color:${gg<0?'var(--danger)':gg<=7?'var(--warn)':'var(--text2)'}">${gg<0?'Scaduta '+Math.abs(gg)+'gg fa':gg===0?'Oggi!':gg+'gg'}</div><div style="font-size:11px;color:var(--text3)">${fmtData(s.data)}</div></div></div>`;}).join(''):'<div class="empty-state" style="padding:14px">Nessuna scadenza nei prossimi 30 giorni.</div>';
+  const q=(document.getElementById('search-dash')||{value:''}).value.toLowerCase();
+  const lista=dati.prenotazioni.filter(p=>(p.num+(p.nome||'')+(p.camera||'')).toLowerCase().includes(q)).sort((a,b)=>new Date(b.cin)-new Date(a.cin));
+  document.getElementById('dash-tbody').innerHTML=lista.length===0?'<tr><td colspan="11" class="empty-state">Nessuna prenotazione</td></tr>':lista.map(p=>`<tr><td style="font-weight:600">${p.num}</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">${p.camera||'—'}</span></td><td>${p.nome||'—'}</td><td>${fmtData(p.cin)}</td><td>${p.notti}n</td><td><span class="badge ${p.fonte}">${p.fonte}</span></td><td>${fmt(p.totaleImponibile)}</td><td><strong style="color:var(--accent)">${fmt(p.netto)}</strong></td><td>${p.mesePag||'—'}</td><td><span class="badge ${p.stato}" onclick="toggleStato(${p.id})">${p.stato==='attesa'?'In attesa':'✓ Ricevuto'}</span></td><td><button class="btn sm danger" onclick="eliminaPren(${p.id})">Elimina</button></td></tr>`).join('');
+}
+
+function renderCalendario(){
+  document.getElementById('cal-title').textContent=MESI[calMese]+' '+calAnno;
+  const cF=document.getElementById('cal-camera-filter').value;
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'].forEach(d=>{grid.innerHTML+=`<div class="cal-day-label">${d}</div>`;});
+  const pG=new Date(calAnno,calMese,1);
+  const sD=(pG.getDay()+6)%7;
+  const tG=new Date(calAnno,calMese+1,0).getDate();
+  for(let i=0;i<sD;i++)grid.innerHTML+='<div class="cal-day empty"></div>';
+  for(let g=1;g<=tG;g++){
+    const ds=`${calAnno}-${String(calMese+1).padStart(2,'0')}-${String(g).padStart(2,'0')}`;
+    const isO=(g===oggi.getDate()&&calMese===oggi.getMonth()&&calAnno===oggi.getFullYear());
+    let ev='';
+    const pF=cF?dati.prenotazioni.filter(p=>p.camera===cF):dati.prenotazioni;
+    pF.forEach(p=>{
+      if(p.cin===ds)ev+=`<div class="cal-event checkin">CI: ${(p.nome||p.num).substring(0,9)}</div>`;
+      if(p.cout===ds)ev+=`<div class="cal-event checkout">CO: ${(p.nome||p.num).substring(0,9)}</div>`;
+      if(p.cin<ds&&p.cout>ds)ev+=`<div class="cal-event soggiorno">${(p.camera||'').substring(0,7)}</div>`;
+    });
+    const puF=cF?dati.pulizie.filter(p=>p.camera===cF):dati.pulizie;
+    puF.filter(p=>p.data===ds).forEach(p=>{ev+=`<div class="cal-event pulizia-ev">🧹 ${p.camera.substring(0,7)}</div>`;});
+    grid.innerHTML+=`<div class="cal-day${isO?' today':''}"><div class="cal-day-num">${g}</div>${ev}</div>`;
+  }
+}
+function cambiaCalMese(d){calMese+=d;if(calMese>11){calMese=0;calAnno++;}if(calMese<0){calMese=11;calAnno--;}renderCalendario();}
+
+function onDateChange(){const cin=document.getElementById('f-cin').value;const cout=document.getElementById('f-cout').value;if(cin&&cout)document.getElementById('f-notti').value=calcNotti(cin,cout);aggiornaPreview();}
+function aggiornaPreview(){
+  const cin=document.getElementById('f-cin').value,cout=document.getElementById('f-cout').value;
+  const imp=parseFloat(document.getElementById('f-imp').value)||0;
+  const fonte=document.getElementById('f-fonte').value;
+  const box=document.getElementById('preview-box');
+  if(!cin||!cout||!imp){box.style.display='none';['f-extra','f-totale','f-comm-display','f-netto-display'].forEach(i=>document.getElementById(i).value='');return;}
+  const notti=calcNotti(cin,cout);const c=calcTutto(imp,fonte,notti);
+  document.getElementById('f-extra').value=c.extra.totale.toFixed(2);
+  document.getElementById('f-totale').value=c.totaleImponibile.toFixed(2);
+  document.getElementById('f-comm-display').value=c.commissione.toFixed(2);
+  document.getElementById('f-netto-display').value=c.netto.toFixed(2);
+  box.style.display='block';
+  box.innerHTML=`<strong>Calcolo:</strong> Lordo ${fmt(imp)} + Extra ${fmt(c.extra.totale)} = ${fmt(c.totaleImponibile)} → Comm. ${c.comm}% −${fmt(c.commissione)} = <strong style="color:var(--accent)">Netto ${fmt(c.netto)}</strong>`;
+}
+function aggiungi(){
+  const num=document.getElementById('f-num').value.trim();
+  const cin=document.getElementById('f-cin').value,cout=document.getElementById('f-cout').value;
+  const camera=document.getElementById('f-camera').value;
+  const nome=document.getElementById('f-nome').value.trim();
+  const imp=parseFloat(document.getElementById('f-imp').value)||0;
+  const fonte=document.getElementById('f-fonte').value;
+  const note=document.getElementById('f-note').value.trim();
+  if(!num||!cin||!cout||!imp){alert('Compila: N° prenotazione, date e importo.');return;}
+  const notti=calcNotti(cin,cout);const c=calcTutto(imp,fonte,notti);
+  dati.prenotazioni.push({num,cin,cout,camera,nome,imp,fonte,notti,note,extra:c.extra,commissione:Math.round(c.commissione*100)/100,netto:Math.round(c.netto*100)/100,totaleImponibile:Math.round(c.totaleImponibile*100)/100,comm:c.comm,stato:'attesa',mesePag:mesePagamento(cin,fonte),id:Date.now()});
+  salva();resetForm();toast('✓ Prenotazione aggiunta!');showSection('prenotazioni',null);renderDash();
+}
+function resetForm(){['f-num','f-cin','f-cout','f-nome','f-notti','f-note','f-imp','f-extra','f-totale','f-comm-display','f-netto-display'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-fonte').value='agenzia';document.getElementById('preview-box').style.display='none';}
+
+function renderLista(){
+  const q=(document.getElementById('search-pren')||{value:''}).value.toLowerCase();
+  const fc=(document.getElementById('filter-camera')||{value:''}).value;
+  const ff=(document.getElementById('filter-fonte')||{value:''}).value;
+  const fs=(document.getElementById('filter-stato')||{value:''}).value;
+  const lista=dati.prenotazioni.filter(p=>(p.num+(p.nome||'')+(p.camera||'')).toLowerCase().includes(q)).filter(p=>!fc||p.camera===fc).filter(p=>!ff||p.fonte===ff).filter(p=>!fs||p.stato===fs).sort((a,b)=>new Date(b.cin)-new Date(a.cin));
+  document.getElementById('pren-tbody').innerHTML=lista.length===0?'<tr><td colspan="16" class="empty-state">Nessuna prenotazione</td></tr>':lista.map(p=>`<tr><td style="font-weight:600">${p.num}</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">${p.camera||'—'}</span></td><td>${p.nome||'—'}</td><td>${fmtData(p.cin)}</td><td>${fmtData(p.cout)}</td><td style="text-align:center">${p.notti}</td><td><span class="badge ${p.fonte}">${p.fonte==='agenzia'?'Agenzia':'Diretta'}</span></td><td style="text-align:right">${fmt(p.imp)}</td><td style="text-align:right;font-size:11px;color:var(--text3)">${fmt(p.extra?p.extra.totale:0)}</td><td style="text-align:right;font-weight:500">${fmt(p.totaleImponibile)}</td><td style="text-align:center">${p.comm||'—'}%</td><td style="text-align:right;color:var(--warn)">${fmt(p.commissione)}</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">${fmt(p.netto)}</td><td>${p.mesePag||'—'}</td><td><span class="badge ${p.stato}" onclick="toggleStato(${p.id})">${p.stato==='attesa'?'In attesa':'✓ Ricevuto'}</span></td><td><button class="btn sm" onclick="editaPren(${p.id})">Modifica</button></td></tr>`).join('');
+}
+function toggleStato(id){const p=dati.prenotazioni.find(x=>x.id===id);if(p){p.stato=p.stato==='attesa'?'ricevuto':'attesa';salva();renderLista();renderDash();}}
+function eliminaPren(id){if(confirm('Eliminare?')){dati.prenotazioni=dati.prenotazioni.filter(p=>p.id!==id);salva();renderDash();renderLista();toast('Eliminata.','danger');}}
+
+function renderCorrezioni(){
+  const sel=document.getElementById('corr-select');
+  sel.innerHTML='<option value="">— Seleziona</option>'+dati.prenotazioni.sort((a,b)=>new Date(b.cin)-new Date(a.cin)).map(p=>`<option value="${p.id}">${p.num} — ${p.camera||''} — ${p.nome||'Senza nome'} (${fmtData(p.cin)})</option>`).join('');
+  document.getElementById('corr-form-container').style.display='none';
+}
+function editaPren(id){showSection('correzioni',null);setTimeout(()=>{document.getElementById('corr-select').value=id;caricaCorrezione();},100);}
+function caricaCorrezione(){
+  const id=parseInt(document.getElementById('corr-select').value);
+  const cont=document.getElementById('corr-form-container');
+  if(!id){cont.style.display='none';return;}
+  const p=dati.prenotazioni.find(x=>x.id===id);if(!p)return;
+  cont.style.display='block';
+  document.getElementById('corr-num').value=p.num;
+  document.getElementById('corr-camera').value=p.camera||'Mono Suite';
+  document.getElementById('corr-fonte').value=p.fonte;
+  document.getElementById('corr-nome').value=p.nome||'';
+  document.getElementById('corr-cin').value=p.cin;
+  document.getElementById('corr-cout').value=p.cout;
+  document.getElementById('corr-notti').value=p.notti;
+  document.getElementById('corr-imp').value=p.imp;
+  document.getElementById('corr-fattbh').value=p.fattBH||'';
+  document.getElementById('corr-note').value=p.note||'';
+  aggiornaAnteprimaCorr();
+}
+function aggiornaAnteprimaCorr(){
+  const cin=document.getElementById('corr-cin').value,cout=document.getElementById('corr-cout').value;
+  const imp=parseFloat(document.getElementById('corr-imp').value)||0;
+  const fonte=document.getElementById('corr-fonte').value;
+  const fattBH=parseFloat(document.getElementById('corr-fattbh').value)||null;
+  const notti=calcNotti(cin,cout);
+  document.getElementById('corr-notti').value=notti;
+  const box=document.getElementById('corr-preview');
+  if(!imp){box.style.display='none';return;}
+  box.style.display='block';
+  if(fattBH){const ex=calcExtra(notti);const tot=imp+ex.totale;box.innerHTML=`Con FATT BH: ${fmt(tot)} − ${fmt(fattBH)} = <strong style="color:var(--accent)">Netto ${fmt(tot-fattBH)}</strong>`;}
+  else{const c=calcTutto(imp,fonte,notti);box.innerHTML=`${fmt(imp)} + Extra ${fmt(c.extra.totale)} = ${fmt(c.totaleImponibile)} → <strong style="color:var(--accent)">Netto ${fmt(c.netto)}</strong>`;}
+}
+function salvaCorrezione(){
+  const id=parseInt(document.getElementById('corr-select').value);
+  const p=dati.prenotazioni.find(x=>x.id===id);if(!p)return;
+  const cin=document.getElementById('corr-cin').value,cout=document.getElementById('corr-cout').value;
+  const imp=parseFloat(document.getElementById('corr-imp').value)||0;
+  const fonte=document.getElementById('corr-fonte').value;
+  const fattBH=parseFloat(document.getElementById('corr-fattbh').value)||null;
+  const notti=calcNotti(cin,cout);
+  p.cin=cin;p.cout=cout;p.imp=imp;p.fonte=fonte;p.notti=notti;
+  p.camera=document.getElementById('corr-camera').value;
+  p.nome=document.getElementById('corr-nome').value||'';
+  p.note=document.getElementById('corr-note').value||'';
+  p.fattBH=fattBH;p.mesePag=mesePagamento(cin,fonte);
+  if(fattBH){const ex=calcExtra(notti);p.extra=ex;p.totaleImponibile=Math.round((imp+ex.totale)*100)/100;p.commissione=Math.round(fattBH*100)/100;p.netto=Math.round((imp+ex.totale-fattBH)*100)/100;p.comm=null;}
+  else{const c=calcTutto(imp,fonte,notti);p.extra=c.extra;p.commissione=Math.round(c.commissione*100)/100;p.netto=Math.round(c.netto*100)/100;p.totaleImponibile=Math.round(c.totaleImponibile*100)/100;p.comm=c.comm;}
+  salva();toast('✓ Prenotazione corretta!');renderCorrezioni();renderLista();renderDash();
+}
+function eliminaDaCorrezione(){
+  if(!confirm('Eliminare?'))return;
+  const id=parseInt(document.getElementById('corr-select').value);
+  dati.prenotazioni=dati.prenotazioni.filter(x=>x.id!==id);salva();
+  document.getElementById('corr-form-container').style.display='none';
+  renderCorrezioni();renderLista();renderDash();toast('Eliminata.','danger');
+}
+
+function caricaStaffSelect(){
+  document.getElementById('pul-staff').innerHTML='<option value="">— Seleziona</option>'+dati.staff.map(s=>`<option value="${s.id}">${s.nome}</option>`).join('');
+  caricaTariffe();
+}
+function caricaTariffe(){['ordinaria','cambio','approfondita','straordinaria'].forEach(k=>{const el=document.getElementById('tariffa-'+k);if(el)el.value=dati.tariffePulizie[k]||TARIFFE_DEFAULT[k];});}
+function salvaTariffe(){['ordinaria','cambio','approfondita','straordinaria'].forEach(k=>{const el=document.getElementById('tariffa-'+k);if(el&&el.value)dati.tariffePulizie[k]=parseFloat(el.value)||0;});salva();}
+function aggiornaCostoPulizia(){const tipo=document.getElementById('pul-tipo').value;document.getElementById('pul-costo').value=dati.tariffePulizie[tipo]||'';}
+function aggiungiPulizia(){
+  const camera=document.getElementById('pul-camera').value;
+  const data=document.getElementById('pul-data').value;
+  const tipo=document.getElementById('pul-tipo').value;
+  const costo=parseFloat(document.getElementById('pul-costo').value)||dati.tariffePulizie[tipo]||0;
+  const staffId=parseInt(document.getElementById('pul-staff').value)||null;
+  const orario=document.getElementById('pul-orario').value;
+  const note=document.getElementById('pul-note').value.trim();
+  if(!camera||!data){alert('Compila camera e data.');return;}
+  const staffObj=dati.staff.find(s=>s.id===staffId);
+  const pul={id:Date.now(),camera,data,tipo,costo,staffId,staffNome:staffObj?staffObj.nome:'',orario,note,stato:'programmata'};
+  dati.pulizie.push(pul);
+  sincronizzaSpesePulizie();salva();
+  if(staffObj){
+    waCurrentPuliziaId=pul.id;
+    const tLabel={ordinaria:'Ordinaria (post checkout)',cambio:'Cambio biancheria',approfondita:'Approfondita',straordinaria:'Straordinaria'}[tipo]||tipo;
+    const msg=`🏡 *B&B — Servizio pulizie*\n\nCiao ${staffObj.nome}! 👋\n\nHai una pulizia programmata:\n\n🛏 *Camera:* ${camera}\n📅 *Data:* ${fmtData(data)}\n⏰ *Orario:* ${orario||'da concordare'}\n🧹 *Tipo:* ${tLabel}\n💰 *Compenso:* ${fmt(costo)}${note?'\n📝 Note: '+note:''}\n\n✨ Grazie mille!`;
+    document.getElementById('wa-modal-sub').textContent=`A: ${staffObj.nome} (${staffObj.tel})`;
+    document.getElementById('wa-preview-text').textContent=msg;
+    apriModal('wa-modal');
+  } else {toast('✓ Pulizia programmata!');}
+  document.getElementById('pul-note').value='';
+  renderPulizie();renderDash();
+}
+function inviaWAPulizia(){
+  const msg=document.getElementById('wa-preview-text').textContent;
+  const pul=dati.pulizie.find(p=>p.id===waCurrentPuliziaId);
+  if(pul){const s=dati.staff.find(s=>s.id===pul.staffId);if(s){window.open('https://wa.me/'+s.tel.replace(/\s/g,'').replace(/^\+/,'')+'?text='+encodeURIComponent(msg),'_blank');}}
+  chiudiModal('wa-modal');toast('📱 Notifica inviata!');
+}
+function renderPulizie(){
+  const q=(document.getElementById('search-pul')||{value:''}).value.toLowerCase();
+  const fc=(document.getElementById('filter-pul-camera')||{value:''}).value;
+  const fs=(document.getElementById('filter-pul-stato')||{value:''}).value;
+  const lista=dati.pulizie.filter(p=>(p.camera+p.staffNome+p.tipo).toLowerCase().includes(q)).filter(p=>!fc||p.camera===fc).filter(p=>!fs||p.stato===fs).sort((a,b)=>new Date(b.data)-new Date(a.data));
+  const tL={ordinaria:'Ordinaria',cambio:'Cambio biancheria',approfondita:'Approfondita',straordinaria:'Straordinaria'};
+  document.getElementById('pulizie-tbody').innerHTML=lista.length===0?'<tr><td colspan="9" class="empty-state">Nessuna pulizia</td></tr>':lista.map(p=>`<tr><td>${fmtData(p.data)}</td><td>${p.orario||'—'}</td><td><span style="font-size:10px;background:var(--blue-light);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600">${p.camera}</span></td><td>${tL[p.tipo]||p.tipo}</td><td>${p.staffNome||'—'}</td><td style="font-weight:600">${fmt(p.costo)}</td><td style="color:var(--text3);font-size:11px">${p.note||'—'}</td><td><span class="badge ${p.stato==='completata'?'ricevuto':'attesa'}" onclick="togglePulizia(${p.id})" style="cursor:pointer">${p.stato==='completata'?'✓ Completata':'Programmata'}</span></td><td><button class="btn sm danger" onclick="eliminaPulizia(${p.id})">Elimina</button></td></tr>`).join('');
+}
+function togglePulizia(id){const p=dati.pulizie.find(x=>x.id===id);if(p){p.stato=p.stato==='programmata'?'completata':'programmata';if(p.stato==='completata'){dati.statiCamere[p.camera]={stato:'libera',note:''};} salva();renderPulizie();renderDash();}}
+function eliminaPulizia(id){if(confirm('Eliminare?')){dati.pulizie=dati.pulizie.filter(p=>p.id!==id);sincronizzaSpesePulizie();salva();renderPulizie();renderDash();toast('Eliminata.','danger');}}
+function sincronizzaSpesePulizie(){
+  const bM={};
+  dati.pulizie.forEach(p=>{if(!p.data)return;const ym2=p.data.substring(0,7);const mIdx=parseInt(ym2.split('-')[1])-1;const mk=MESI[mIdx]+' '+ym2.split('-')[0];if(!bM[mk])bM[mk]=0;bM[mk]+=p.costo||0;});
+  Object.keys(bM).forEach(mk=>{if(!dati.spese[mk])dati.spese[mk]={};dati.spese[mk]['pulizie']=Math.round(bM[mk]*100)/100;});
+}
+
+function aggiungiStaff(){
+  const nome=document.getElementById('s-nome').value.trim();
+  const tel=document.getElementById('s-tel').value.trim();
+  const tariffa=parseFloat(document.getElementById('s-tariffa').value)||10;
+  if(!nome||!tel){toast('⚠ Nome e telefono obbligatori','danger');return;}
+  dati.staff.push({id:Date.now(),nome,tel,tariffa,disponibile:true});salva();
+  document.getElementById('s-nome').value='';document.getElementById('s-tel').value='';document.getElementById('s-tariffa').value='10';
+  renderServizio();toast('✓ Collaboratrice aggiunta!');
+}
+function toggleDisponibile(id){const s=dati.staff.find(s=>s.id===id);if(s){s.disponibile=!s.disponibile;salva();renderServizio();}}
+function eliminaStaff(id){if(!confirm('Eliminare?'))return;dati.staff=dati.staff.filter(s=>s.id!==id);salva();renderServizio();toast('Rimossa.','danger');}
+function renderServizio(){
+  document.getElementById('staff-grid').innerHTML=dati.staff.length?dati.staff.map(s=>`<div class="staff-card ${s.disponibile?'available':''}"><div class="staff-avatar">${s.nome.charAt(0).toUpperCase()}</div><div class="staff-info"><div class="staff-name">${s.nome}</div><div class="staff-rate">${fmt(s.tariffa)}/ora · ${s.tel}</div></div><div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end"><button class="btn sm ${s.disponibile?'primary':''}" onclick="toggleDisponibile(${s.id})">${s.disponibile?'✓ Disponibile':'○ Off'}</button><button class="btn sm danger" onclick="eliminaStaff(${s.id})">Elimina</button></div></div>`).join(''):'<div class="empty-state" style="padding:16px;grid-column:1/-1">Nessuna collaboratrice.</div>';
+  renderStaffReport();
+}
+function renderStaffReport(){
+  const list=document.getElementById('staff-report-list');
+  if(!dati.pulizie.filter(p=>p.staffId).length){list.innerHTML='<div class="empty-state" style="padding:16px">Nessun lavoro registrato.</div>';return;}
+  const bSM={};
+  dati.pulizie.filter(p=>p.staffId&&p.costo).forEach(p=>{
+    if(!p.data)return;
+    const ym2=p.data.substring(0,7);const mIdx=parseInt(ym2.split('-')[1])-1;
+    const mk=MESI[mIdx]+' '+ym2.split('-')[0];
+    const key=p.staffId+'__'+mk;
+    if(!bSM[key])bSM[key]={staffId:p.staffId,nome:p.staffNome,mk,lavori:[],totale:0};
+    bSM[key].lavori.push(p);bSM[key].totale+=p.costo||0;
+  });
+  const bS={};
+  Object.values(bSM).forEach(e=>{if(!bS[e.staffId])bS[e.staffId]={nome:e.nome,mesi:[],totGen:0};bS[e.staffId].mesi.push(e);bS[e.staffId].totGen+=e.totale;});
+  const tL={ordinaria:'Ordinaria',cambio:'Cambio biancheria',approfondita:'Approfondita',straordinaria:'Straordinaria'};
+  list.innerHTML=Object.values(bS).map(s=>{
+    const mesiH=s.mesi.sort((a,b)=>b.mk.localeCompare(a.mk)).map(m=>{
+      const pk=m.staffId+'__'+m.mk;const pag=dati.pagamentiStaff&&dati.pagamentiStaff[pk];
+      return`<div style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:9px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:${pag?'var(--accent-light)':'var(--surface2)'};flex-wrap:wrap;gap:7px">
+          <span style="font-weight:600;font-size:13px">${m.mk} <span style="font-size:11px;font-weight:400;color:var(--text3)">(${m.lavori.length} pulizie)</span></span>
+          <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+            <span style="font-size:15px;font-family:'DM Serif Display',serif;color:${pag?'var(--accent)':'var(--gold)'}">${fmt(m.totale)}</span>
+            ${pag?`<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--accent);color:#fff;border-radius:20px;font-size:11px;font-weight:600">✓ Saldato ${pag.data}</span><button class="btn sm" onclick="annullaPagamento('${pk}')" style="font-size:10px">Annulla</button>`:`<button class="btn sm primary" onclick="apriPagamento('${pk}','${s.nome}','${m.mk}',${m.totale})">Segna come pagato</button>`}
+          </div>
+        </div>
+        <div style="overflow-x:auto;background:var(--surface)"><table><thead><tr><th>Data</th><th>Camera</th><th>Tipo</th><th>Costo</th><th>Note</th></tr></thead><tbody>${m.lavori.map(l=>`<tr><td>${fmtData(l.data)}</td><td>${l.camera}</td><td>${tL[l.tipo]||l.tipo}</td><td style="font-weight:600">${fmt(l.costo)}</td><td style="color:var(--text3)">${l.note||'—'}</td></tr>`).join('')}</tbody></table></div>
+      </div>`;}).join('');
+    return`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:15px;margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px"><div style="display:flex;align-items:center;gap:9px"><div style="width:34px;height:34px;border-radius:50%;background:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:15px;color:#fff">${s.nome.charAt(0)}</div><div style="font-weight:600;font-size:14px">👩 ${s.nome}</div></div><div style="text-align:right"><div style="font-size:10px;color:var(--text3);text-transform:uppercase">Totale storico</div><div style="font-size:20px;font-family:'DM Serif Display',serif;color:var(--gold)">${fmt(s.totGen)}</div></div></div>${mesiH}</div>`;
+  }).join('');
+}
+function apriPagamento(pk,nome,mese,totale){pagCurrentKey=pk;document.getElementById('pag-modal-sub').textContent=`${nome} · ${mese} · ${fmt(totale)}`;document.getElementById('pag-data').value=oggiStr();document.getElementById('pag-note').value='';apriModal('pag-modal');}
+function confermaPagamento(){if(!pagCurrentKey)return;if(!dati.pagamentiStaff)dati.pagamentiStaff={};dati.pagamentiStaff[pagCurrentKey]={pagato:true,data:new Date(document.getElementById('pag-data').value).toLocaleDateString('it-IT'),note:document.getElementById('pag-note').value};salva();chiudiModal('pag-modal');renderStaffReport();toast('✓ Pagamento segnato!');}
+function annullaPagamento(pk){if(!dati.pagamentiStaff)return;delete dati.pagamentiStaff[pk];salva();renderStaffReport();toast('Pagamento annullato.','danger');}
+
+function renderSpese(){
+  const sel=document.getElementById('spese-mese');
+  if(sel.options.length===0){MESI.forEach(m=>{const o=document.createElement('option');o.value=m+' '+ANNO;o.textContent=m+' '+ANNO;sel.appendChild(o);});sel.value=MESI[new Date().getMonth()]+' '+ANNO;}
+  const mese=sel.value;if(!dati.spese[mese])dati.spese[mese]={};
+  const yk=ymKey(mese);
+  const pulM=dati.pulizie.filter(p=>p.data&&p.data.startsWith(yk));
+  const totPul=pulM.reduce((s,p)=>s+p.costo,0);
+  const bS={};pulM.forEach(p=>{if(!bS[p.staffNome||'—'])bS[p.staffNome||'—']={n:0,tot:0};bS[p.staffNome||'—'].n++;bS[p.staffNome||'—'].tot+=p.costo;});
+  const detH=Object.keys(bS).length?'<div style="margin-top:8px;padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm)"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:7px">Dettaglio collaboratrici</div>'+Object.entries(bS).map(([nome,d])=>{const sO=dati.staff.find(s=>s.nome===nome);const pk=(sO?sO.id:'?')+'__'+mese;const pag=dati.pagamentiStaff&&dati.pagamentiStaff[pk];return`<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);gap:7px"><span>👩 ${nome} <span style="color:var(--text3)">(${d.n} pulizie)</span></span><div style="display:flex;align-items:center;gap:7px"><strong style="color:var(--warn)">${fmt(d.tot)}</strong>${pag?`<span style="background:var(--accent);color:#fff;border-radius:20px;padding:1px 8px;font-size:10px">✓ Saldato</span>`:`<span style="background:var(--warn-light);color:var(--warn);border-radius:20px;padding:1px 8px;font-size:10px;border:1px solid #D4A478">Da pagare</span>`}</div></div>`;}).join('')+'</div>':'<div style="margin-top:7px;font-size:12px;color:var(--text3)">Nessuna pulizia registrata questo mese.</div>';
+  document.getElementById('spese-form').innerHTML=SPESE_VOCI.map(v=>{
+    if(v.auto)return`<div class="spese-row" style="flex-direction:column;align-items:stretch;gap:7px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><label style="display:flex;align-items:center;gap:7px">${v.label}<span style="font-size:9px;background:var(--accent-light);color:var(--accent-dark);border:1px solid var(--accent);border-radius:4px;padding:1px 6px;font-weight:600">AUTO</span></label><div style="display:flex;align-items:center;gap:9px"><span style="font-size:12px;color:var(--text3)">${pulM.length} pulizie</span><input type="number" value="${totPul.toFixed(2)}" readonly style="width:120px;background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:6px 10px;font-size:13px;text-align:right;color:var(--accent-dark);font-family:'DM Sans',sans-serif;cursor:not-allowed;font-weight:600"></div></div>${detH}</div>`;
+    return`<div class="spese-row"><label>${v.label}</label><input type="number" step="0.01" min="0" placeholder="0.00" value="${dati.spese[mese][v.id]||''}" oninput="salvaSpesa('${mese}','${v.id}',this.value)"></div>`;
+  }).join('');
+  aggiornaRiepilogoSpese(mese);
+}
+function salvaSpesa(mese,id,val){if(!dati.spese[mese])dati.spese[mese]={};dati.spese[mese][id]=val?parseFloat(val):0;salva();aggiornaRiepilogoSpese(mese);}
+function aggiornaRiepilogoSpese(mese){
+  const entrate=dati.prenotazioni.filter(p=>p.mesePag===mese).reduce((s,p)=>s+(p.netto||0),0);
+  const yk=ymKey(mese);const pulT=dati.pulizie.filter(p=>p.data&&p.data.startsWith(yk)).reduce((s,p)=>s+p.costo,0);
+  const altreS=SPESE_VOCI.filter(v=>!v.auto).reduce((s,v)=>s+parseFloat(dati.spese[mese]?.[v.id]||0),0);
+  const tot=altreS+pulT;const saldo=entrate-tot;
+  const col=saldo>=0?'var(--accent)':'var(--danger)';const bg=saldo>=0?'var(--accent-light)':'var(--danger-light)';
+  document.getElementById('riepilogo-spese').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px"><div style="padding:13px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--accent-light);text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Entrate nette</div><div style="font-size:20px;font-weight:600;color:var(--accent)">${fmt(entrate)}</div></div><div style="padding:13px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--danger-light);text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Totale spese</div><div style="font-size:20px;font-weight:600;color:var(--danger)">${fmt(tot)}</div>${pulT>0?`<div style="font-size:10px;color:var(--text3);margin-top:3px">di cui pulizie: ${fmt(pulT)}</div>`:''}</div><div style="padding:13px;border:2px solid ${col};border-radius:var(--radius-sm);background:${bg};text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Saldo netto</div><div style="font-size:20px;font-weight:600;color:${col}">${fmt(saldo)}</div></div></div><div style="margin-top:9px;padding:9px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:11px;color:var(--text3)">✓ Salvato automaticamente · Pulizie aggiornate dalla pianificazione</div>`;
+}
+
+function aggiungiScadenza(){
+  const desc=document.getElementById('sc-desc').value.trim();
+  const data=document.getElementById('sc-data').value;
+  const imp=parseFloat(document.getElementById('sc-imp').value)||null;
+  const cat=document.getElementById('sc-cat').value;
+  const note=document.getElementById('sc-note').value.trim();
+  if(!desc||!data){alert('Compila descrizione e data.');return;}
+  dati.scadenze.push({id:Date.now(),desc,data,imp,cat,note,completata:false});salva();
+  document.getElementById('sc-desc').value='';document.getElementById('sc-data').value='';document.getElementById('sc-imp').value='';document.getElementById('sc-note').value='';
+  renderScadenze();renderDash();toast('✓ Scadenza aggiunta!');
+}
+function renderScadenze(){
+  const lista=dati.scadenze.sort((a,b)=>new Date(a.data)-new Date(b.data));
+  if(!lista.length){document.getElementById('scadenze-list').innerHTML='<div class="empty-state">Nessuna scadenza registrata.</div>';return;}
+  document.getElementById('scadenze-list').innerHTML=lista.map(s=>{
+    const d=new Date(s.data);const gg=Math.round((d-oggi)/86400000);
+    const cl=s.completata?'':gg<0?'scaduta':gg<=7?'vicina':'';
+    return`<div class="scadenza-item ${cl}"><div><div style="font-weight:600;font-size:13px${s.completata?';text-decoration:line-through;color:var(--text3)':''}">${s.desc}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${s.cat}${s.imp?' · '+fmt(s.imp):''}${s.note?' · '+s.note:''}</div></div><div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><div style="text-align:right"><div style="font-size:13px;font-weight:600;color:${s.completata?'var(--accent)':gg<0?'var(--danger)':gg<=7?'var(--warn)':'var(--text2)'}">${s.completata?'✓ Completata':gg<0?'Scaduta '+Math.abs(gg)+'gg fa':gg===0?'Oggi!':gg+'gg'}</div><div style="font-size:11px;color:var(--text3)">${fmtData(s.data)}</div></div><button class="btn sm ${s.completata?'':'primary'}" onclick="toggleScadenza(${s.id})">${s.completata?'Riapri':'✓ Fatto'}</button><button class="btn sm danger" onclick="eliminaScadenza(${s.id})">Elimina</button></div></div>`;
+  }).join('');
+}
+function toggleScadenza(id){const s=dati.scadenze.find(x=>x.id===id);if(s){s.completata=!s.completata;salva();renderScadenze();renderDash();}}
+function eliminaScadenza(id){if(confirm('Eliminare?')){dati.scadenze=dati.scadenze.filter(x=>x.id!==id);salva();renderScadenze();renderDash();}}
+
+function renderStatistiche(){
+  const c=document.getElementById('stats-container');
+  if(!dati.prenotazioni.length){c.innerHTML='<div class="empty-state">Nessuna prenotazione per le statistiche.</div>';return;}
+  const occ={};CAMERE.forEach(cam=>{const pC=dati.prenotazioni.filter(p=>p.camera===cam&&new Date(p.cin).getFullYear()===ANNO);const gg=pC.reduce((s,p)=>s+p.notti,0);occ[cam]={gg,perc:Math.min(100,Math.round(gg/365*100))};});
+  const med={};CAMERE.forEach(cam=>{const pC=dati.prenotazioni.filter(p=>p.camera===cam&&p.notti>0);med[cam]=pC.length?pC.reduce((s,p)=>s+(p.imp/p.notti),0)/pC.length:0;});
+  const pM={};MESI.forEach(m=>{const mk=m+' '+ANNO;const pren=dati.prenotazioni.filter(p=>p.mesePag===mk);pM[m]={netto:pren.reduce((s,p)=>s+p.netto,0),n:pren.length};});
+  const maxN=Math.max(...Object.values(pM).map(x=>x.netto),1);
+  c.innerHTML=`
+    <div class="form-card"><h3>Tasso di occupazione ${ANNO}</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px">${CAMERE.map(cam=>`<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-weight:600;font-size:13px;margin-bottom:8px">${cam}</div><div style="font-size:24px;font-family:'DM Serif Display',serif;color:var(--accent)">${occ[cam].perc}%</div><div class="occ-bar"><div class="occ-bar-fill" style="width:${occ[cam].perc}%"></div></div><div style="font-size:11px;color:var(--text3);margin-top:5px">${occ[cam].gg} notti</div></div>`).join('')}</div></div>
+    <div class="form-card"><h3>Tariffa media per notte</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px">${CAMERE.map(cam=>`<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-weight:600;font-size:13px;margin-bottom:6px">${cam}</div><div style="font-size:22px;font-family:'DM Serif Display',serif;color:var(--gold)">${fmt(med[cam])}</div><div style="font-size:11px;color:var(--text3);margin-top:3px">a notte</div></div>`).join('')}</div></div>
+    <div class="form-card"><h3>Incassi netti per mese (${ANNO})</h3><div style="margin-top:8px">${MESI.map(m=>{const d=pM[m];const w=Math.round(d.netto/maxN*100);return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px"><div style="width:80px;font-size:12px;color:var(--text2);flex-shrink:0">${m.substring(0,3)}</div><div style="flex:1;background:var(--surface2);border-radius:4px;height:22px;overflow:hidden;position:relative"><div style="height:100%;background:var(--accent);border-radius:4px;width:${w}%"></div>${d.netto>0?`<div style="position:absolute;left:8px;top:3px;font-size:11px;color:${w>30?'#fff':'var(--accent-dark)'};font-weight:600">${fmt(d.netto)}</div>`:''}</div><div style="width:40px;font-size:11px;color:var(--text3);text-align:right">${d.n}p</div></div>`;}).join('')}</div></div>
+    <div class="form-card"><h3>Riepilogo generale</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"><div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Prenotazioni totali</div><div style="font-size:24px;font-family:'DM Serif Display',serif;color:var(--accent)">${dati.prenotazioni.length}</div></div><div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Notti totali</div><div style="font-size:24px;font-family:'DM Serif Display',serif;color:var(--accent)">${dati.prenotazioni.reduce((s,p)=>s+p.notti,0)}</div></div><div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Netto totale</div><div style="font-size:20px;font-family:'DM Serif Display',serif;color:var(--accent)">${fmt(dati.prenotazioni.reduce((s,p)=>s+p.netto,0))}</div></div><div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;text-align:center"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:5px">Agenzia / Diretta</div><div style="font-size:18px;font-weight:600;color:var(--text2)">${dati.prenotazioni.filter(p=>p.fonte==='agenzia').length} / ${dati.prenotazioni.filter(p=>p.fonte==='diretta').length}</div></div></div></div>`;
+}
+
+function initSelectMese(id){const sel=document.getElementById(id);if(sel&&sel.options.length===0){MESI.forEach(m=>{const o=document.createElement('option');o.value=m+' '+ANNO;o.textContent=m+' '+ANNO;sel.appendChild(o);});sel.value=MESI[new Date().getMonth()]+' '+ANNO;}}
+function renderReport(){
+  initSelectMese('report-mese');
+  const mese=document.getElementById('report-mese').value;
+  const pM=dati.prenotazioni.filter(p=>p.mesePag===mese);
+  const yk=ymKey(mese);
+  const pulM=dati.pulizie.filter(p=>p.data&&p.data.startsWith(yk));
+  const totI=pM.reduce((s,p)=>s+(p.totaleImponibile||0),0);
+  const totN=pM.reduce((s,p)=>s+(p.netto||0),0);
+  const altreS=SPESE_VOCI.filter(v=>!v.auto).reduce((s,v)=>s+parseFloat(dati.spese[mese]?.[v.id]||0),0);
+  const pulT=pulM.reduce((s,p)=>s+p.costo,0);
+  const saldo=totN-altreS-pulT;
+  const tL={ordinaria:'Ordinaria',cambio:'Cambio biancheria',approfondita:'Approfondita',straordinaria:'Straordinaria'};
+  let html=`<div class="report-box"><div class="report-box-item"><div class="report-box-label">Prenotazioni</div><div class="report-box-value">${pM.length}</div></div><div class="report-box-item"><div class="report-box-label">Incasso lordo</div><div class="report-box-value gold">${fmt(totI)}</div></div><div class="report-box-item"><div class="report-box-label">Netto propri.</div><div class="report-box-value green">${fmt(totN)}</div></div><div class="report-box-item"><div class="report-box-label">Spese</div><div class="report-box-value red">${fmt(altreS)}</div></div><div class="report-box-item"><div class="report-box-label">Pulizie</div><div class="report-box-value red">${fmt(pulT)}</div></div><div class="report-box-item"><div class="report-box-label">Saldo netto</div><div class="report-box-value ${saldo>=0?'green':'red'}">${fmt(saldo)}</div></div></div>`;
+  html+=`<div style="font-weight:600;font-size:14px;margin-bottom:10px">Prenotazioni per camera</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">`;
+  CAMERE.forEach(cam=>{const pc=pM.filter(p=>p.camera===cam);html+=`<div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;text-align:center"><div style="font-weight:600;font-size:12px;margin-bottom:5px">${cam}</div><div style="font-size:19px;font-family:'DM Serif Display',serif;color:var(--accent)">${pc.length}</div><div style="font-size:11px;color:var(--text3)">${fmt(pc.reduce((s,p)=>s+p.netto,0))}</div></div>`;});
+  html+='</div>';
+  html+=`<div style="font-weight:600;font-size:14px;margin-bottom:9px">Prenotazioni</div>`;
+  html+=pM.length?`<div style="overflow-x:auto;margin-bottom:18px"><table><thead><tr><th>N°</th><th>Camera</th><th>Ospite</th><th>Check-in</th><th>Check-out</th><th>Notti</th><th>Fonte</th><th>Totale</th><th>Comm.</th><th>Netto</th><th>Stato</th></tr></thead><tbody>${pM.map(p=>`<tr><td style="font-weight:600">${p.num}</td><td>${p.camera||'—'}</td><td>${p.nome||'—'}</td><td>${fmtData(p.cin)}</td><td>${fmtData(p.cout)}</td><td style="text-align:center">${p.notti}</td><td><span class="badge ${p.fonte}">${p.fonte==='agenzia'?'Ag.':'Dir.'}</span></td><td style="text-align:right">${fmt(p.totaleImponibile)}</td><td style="text-align:right;color:var(--warn)">${fmt(p.commissione)}</td><td style="text-align:right;font-weight:600;color:var(--accent-dark)">${fmt(p.netto)}</td><td><span class="badge ${p.stato}">${p.stato==='attesa'?'In attesa':'✓ Ricevuto'}</span></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--text3);font-size:13px;margin-bottom:16px">Nessuna prenotazione.</p>';
+  html+=`<div style="font-weight:600;font-size:14px;margin-bottom:9px">Pulizie</div>`;
+  html+=pulM.length?`<div style="overflow-x:auto;margin-bottom:18px"><table><thead><tr><th>Data</th><th>Camera</th><th>Tipo</th><th>Collaboratrice</th><th>Costo</th><th>Stato</th></tr></thead><tbody>${pulM.map(p=>`<tr><td>${fmtData(p.data)}</td><td>${p.camera}</td><td>${tL[p.tipo]||p.tipo}</td><td>${p.staffNome||'—'}</td><td style="font-weight:600">${fmt(p.costo)}</td><td><span class="badge ${p.stato==='completata'?'ricevuto':'attesa'}">${p.stato==='completata'?'✓ Completata':'Programmata'}</span></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--text3);font-size:13px;margin-bottom:16px">Nessuna pulizia.</p>';
+  const spD=SPESE_VOCI.filter(v=>!v.auto&&parseFloat(dati.spese[mese]?.[v.id]||0)>0);
+  html+=`<div style="font-weight:600;font-size:14px;margin-bottom:9px">Altre spese</div>`;
+  html+=spD.length?`<div style="overflow-x:auto"><table><thead><tr><th>Voce</th><th style="text-align:right">Importo</th></tr></thead><tbody>${spD.map(v=>`<tr><td>${v.label}</td><td style="text-align:right;font-weight:600">${fmt(dati.spese[mese][v.id])}</td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--text3);font-size:13px">Nessuna altra spesa.</p>';
+  document.getElementById('report-container').innerHTML=html;
+}
+function exportPDF(){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF();
+  const mese=document.getElementById('report-mese').value||MESI[new Date().getMonth()]+' '+ANNO;
+  const pM=dati.prenotazioni.filter(p=>p.mesePag===mese);
+  const yk=ymKey(mese);
+  const pulM=dati.pulizie.filter(p=>p.data&&p.data.startsWith(yk));
+  const totN=pM.reduce((s,p)=>s+(p.netto||0),0);
+  const altreS=SPESE_VOCI.filter(v=>!v.auto).reduce((s,v)=>s+parseFloat(dati.spese[mese]?.[v.id]||0),0);
+  const pulT=pulM.reduce((s,p)=>s+p.costo,0);const saldo=totN-altreS-pulT;
+  let y=20;
+  const line=(txt,sz=10,bold=false)=>{doc.setFontSize(sz);doc.setFont('helvetica',bold?'bold':'normal');doc.text(txt,14,y);y+=sz*0.55;if(y>275){doc.addPage();y=20;}};
+  line('Report B&B Pro — '+mese,17,true);y+=4;
+  line('Riepilogo',13,true);y+=2;
+  [['Prenotazioni',pM.length],['Netto propri.',fmt(totN)],['Spese',fmt(altreS)],['Pulizie',fmt(pulT)],['Saldo netto',fmt(saldo)]].forEach(([k,v])=>line(`${k}: ${v}`));
+  y+=5;
+  if(pM.length){line('Prenotazioni',13,true);y+=2;pM.forEach(p=>line(`${p.num} | ${p.camera||'—'} | ${p.nome||'—'} | ${fmtData(p.cin)}→${fmtData(p.cout)} | ${p.notti}n | Netto: ${fmt(p.netto)}`,8));}
+  y+=4;
+  if(pulM.length){line('Pulizie',13,true);y+=2;pulM.forEach(p=>line(`${fmtData(p.data)} | ${p.camera} | ${p.tipo} | ${p.staffNome||'—'} | ${fmt(p.costo)}`,8));}
+  doc.save(`Report_BnB_${mese.replace(' ','_')}.pdf`);toast('✓ PDF scaricato!');
+}
+
+function aggiornaSincInfo(){
+  document.getElementById('info-pren').textContent=dati.prenotazioni.length;
+  document.getElementById('info-pul').textContent=dati.pulizie.length;
+  document.getElementById('info-staff').textContent=dati.staff.length;
+  document.getElementById('info-sc').textContent=dati.scadenze.length;
+  document.getElementById('info-update').textContent=localStorage.getItem('bnb_pro_v1_update')||'mai';
+}
+function generaQR(){
+  const cont=document.getElementById('qr-container');
+  const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(dati))));
+  const url=window.location.origin+window.location.pathname+'?sync='+encoded;
+  cont.innerHTML=`<div style="background:var(--surface2);border-radius:var(--radius);padding:22px;text-align:center"><p style="font-size:13px;color:var(--text3);margin-bottom:14px">Scansiona con lo smartphone</p><div id="qrcode-div" style="display:inline-block;padding:13px;background:#fff;border-radius:9px;box-shadow:0 4px 16px rgba(0,0,0,0.1)"></div><p style="font-size:11px;color:var(--text3);margin-top:12px">⏰ Valido per 30 minuti</p><button class="btn" onclick="document.getElementById('qr-container').innerHTML=''" style="margin-top:10px">Chiudi</button></div>`;
+  try{new QRCode(document.getElementById('qrcode-div'),{text:url,width:240,height:240,colorDark:'#1A3D28',colorLight:'#ffffff'});}
+  catch(e){document.getElementById('qrcode-div').innerHTML=`<img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(url)}" style="max-width:240px">`;}
+  setTimeout(()=>{cont.innerHTML='';},30*60*1000);
+}
+function mostraInputLink(){
+  document.getElementById('qr-container').innerHTML=`<div style="background:var(--surface2);border-radius:var(--radius);padding:18px"><p style="font-size:13px;color:var(--text2);margin-bottom:10px">Incolla il link ricevuto dallo smartphone:</p><textarea id="sync-input" placeholder="Incolla il link..." style="width:100%;height:75px;padding:9px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:12px;resize:none;background:var(--surface)"></textarea><div style="display:flex;gap:9px;margin-top:10px"><button class="btn primary" onclick="leggiDaLink()">✓ Sincronizza</button><button class="btn" onclick="document.getElementById('qr-container').innerHTML=''">Annulla</button></div><div id="sync-result" style="margin-top:10px"></div></div>`;
+}
+function leggiDaLink(){
+  const input=document.getElementById('sync-input').value.trim();
+  try{
+    let nuovi=null;
+    if(input.includes('?sync='))nuovi=JSON.parse(decodeURIComponent(escape(atob(input.split('?sync=')[1].split('&')[0]))));
+    else if(input.startsWith('{'))nuovi=JSON.parse(input);
+    else nuovi=JSON.parse(decodeURIComponent(escape(atob(input))));
+    if(nuovi&&nuovi.prenotazioni){
+      const eP=dati.prenotazioni.map(p=>p.id);let ag=0;
+      nuovi.prenotazioni.forEach(p=>{if(!eP.includes(p.id)){dati.prenotazioni.push(p);ag++;}});
+      if(nuovi.spese)Object.keys(nuovi.spese).forEach(m=>{if(!dati.spese[m])dati.spese[m]={};Object.keys(nuovi.spese[m]).forEach(v=>{dati.spese[m][v]=Math.max(dati.spese[m][v]||0,nuovi.spese[m][v]||0);});});
+      if(nuovi.staff){const eS=dati.staff.map(s=>s.id);nuovi.staff.forEach(s=>{if(!eS.includes(s.id))dati.staff.push(s);});}
+      if(nuovi.pulizie){const ePu=dati.pulizie.map(p=>p.id);nuovi.pulizie.forEach(p=>{if(!ePu.includes(p.id))dati.pulizie.push(p);});}
+      if(nuovi.scadenze){const eSc=dati.scadenze.map(s=>s.id);nuovi.scadenze.forEach(s=>{if(!eSc.includes(s.id))dati.scadenze.push(s);});}
+      if(nuovi.pagamentiStaff)Object.assign(dati.pagamentiStaff,nuovi.pagamentiStaff);
+      if(nuovi.statiCamere)Object.assign(dati.statiCamere,nuovi.statiCamere);
+      salva();renderDash();aggiornaSincInfo();
+      document.getElementById('sync-result').innerHTML=`<div class="alert success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg><div>✓ Completata! +${ag} prenotazioni.</div></div>`;
+    }else throw new Error();
+  }catch(e){document.getElementById('sync-result').innerHTML=`<div class="alert danger">Errore: dati non riconosciuti.</div>`;}
+}
+function esportaDati(){const blob=new Blob([JSON.stringify(dati,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup_bnb_pro_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('✓ Backup scaricato!');}
+function importaDati(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const loaded=JSON.parse(e.target.result);
+      if(loaded&&loaded.prenotazioni){
+        dati=loaded;
+        if(!dati.spese)dati.spese={};if(!dati.staff)dati.staff=[];if(!dati.pulizie)dati.pulizie=[];
+        if(!dati.scadenze)dati.scadenze=[];if(!dati.pagamentiStaff)dati.pagamentiStaff={};
+        if(!dati.statiCamere)dati.statiCamere={};if(!dati.tariffePulizie)dati.tariffePulizie={...TARIFFE_DEFAULT};
+        salva();renderDash();aggiornaSincInfo();
+        document.getElementById('import-status').innerHTML=`<div class="alert success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Ripristinato: ${dati.prenotazioni.length} prenotazioni.</div>`;
+        toast('✓ Backup ripristinato!');
+      }else throw new Error();
+    }catch(e){document.getElementById('import-status').innerHTML=`<div class="alert danger">⚠ File non valido.</div>`;}
+  };
+  reader.readAsText(file);
+}
+
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const syncData=params.get('sync');
+  if(syncData){
+    try{
+      const nuovi=JSON.parse(decodeURIComponent(escape(atob(syncData))));
+      if(nuovi&&nuovi.prenotazioni){
+        carica();
+        const eP=dati.prenotazioni.map(p=>p.id);let ag=0;
+        nuovi.prenotazioni.forEach(p=>{if(!eP.includes(p.id)){dati.prenotazioni.push(p);ag++;}});
+        if(nuovi.spese)Object.keys(nuovi.spese).forEach(m=>{if(!dati.spese[m])dati.spese[m]={};Object.keys(nuovi.spese[m]).forEach(v=>{dati.spese[m][v]=Math.max(dati.spese[m][v]||0,nuovi.spese[m][v]||0);});});
+        if(nuovi.staff){const eS=dati.staff.map(s=>s.id);nuovi.staff.forEach(s=>{if(!eS.includes(s.id))dati.staff.push(s);});}
+        if(nuovi.pulizie){const ePu=dati.pulizie.map(p=>p.id);nuovi.pulizie.forEach(p=>{if(!ePu.includes(p.id))dati.pulizie.push(p);});}
+        if(nuovi.scadenze){const eSc=dati.scadenze.map(s=>s.id);nuovi.scadenze.forEach(s=>{if(!eSc.includes(s.id))dati.scadenze.push(s);});}
+        salva();window.history.replaceState({},'',window.location.pathname);
+        alert('✓ Sincronizzazione completata! +'+ag+' prenotazioni.');
+      }
+    }catch(e){}
+  }else{carica();}
+  dati.prenotazioni.forEach(p=>{if(!p.mesePag)p.mesePag=mesePagamento(p.cin,p.fonte);});
+  initSelectMese('report-mese');
+  initSelectMese('spese-mese');
+  renderDash();
+})();
+</script>
+
+
+</body></html>
